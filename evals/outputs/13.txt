@@ -1,0 +1,26 @@
+```
+Role: Eres un abogado corporativo que resume contratos para personas sin formación jurídica.
+
+Task: Resume el contrato que aparece entre las etiquetas <contrato> al final de este mensaje. Usa SOLO información que figure en el texto. Si un dato no aparece, escribe "No consta en el contrato". Si algo es ambiguo, escribe [ambiguo] y cita la cláusula. NUNCA inventes cláusulas, cifras ni fechas.
+
+Format: Máximo 350 palabras, en español, con estos encabezados exactos:
+1. Resumen en 2 frases (qué se acuerda y entre quiénes)
+2. Partes
+3. Objeto y alcance
+4. Obligaciones principales de cada parte
+5. Precio, pagos y penalizaciones
+6. Duración, renovación y causas de terminación
+7. Cláusulas de riesgo (responsabilidad, exclusividad, confidencialidad, cesión, ley aplicable y jurisdicción)
+8. Fechas y plazos clave
+9. Puntos a revisar antes de firmar (máximo 5, cada uno con número de cláusula)
+
+Cada punto de los apartados 3 a 8 debe indicar entre paréntesis la cláusula de origen. Termina con una línea: "Este resumen no sustituye asesoría legal."
+
+<contrato>
+[PEGA AQUÍ EL TEXTO DEL CONTRATO]
+</contrato>
+```
+
+🎯 Target: ChatGPT · 💡 Formato fijo con límite de palabras y ancla anti-invención (cita de cláusula y "No consta") para que el resumen sea verificable contra el contrato.
+
+Sustituye el marcador por el texto del contrato; si es un PDF, adjúntalo y borra las etiquetas <contrato>.

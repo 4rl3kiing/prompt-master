@@ -1,0 +1,37 @@
+```
+Archivo: src/api/orders.ts
+Función: fetchOrders()
+
+Comportamiento actual:
+[Describe qué hace hoy fetchOrders(): p. ej. devuelve datos simulados / no existe la llamada real / falla con X]
+
+Cambio deseado:
+Hacer que fetchOrders() consuma la API de pedidos real:
+- Endpoint: [METHOD] [URL base + ruta, p. ej. GET https://api.ejemplo.com/orders]
+- Autenticación: leer la clave desde process.env.ORDERS_API_KEY y enviarla como [Authorization: Bearer <clave> / cabecera X-API-Key, según la API]. NUNCA escribir la clave en el código.
+- Si ORDERS_API_KEY no está definida, lanzar un error claro antes de hacer la petición.
+- Respuesta: tipar el resultado según [forma del JSON de la API o tipo Order existente en el proyecto].
+- Manejo de errores: si la respuesta no es 2xx, lanzar un Error con el código de estado; no devolver datos parciales en silencio.
+
+Alcance:
+Solo modificar fetchOrders() y, si hace falta, los tipos de respuesta directamente asociados en src/api/orders.ts.
+NO tocar: otras funciones de src/api/orders.ts, otros archivos, .env, .env.example, archivos de configuración ni tests existentes.
+
+Restricciones:
+- Lenguaje/framework: TypeScript [versión] con [fetch nativo / axios, el que ya use el proyecto]
+- No añadir dependencias que no estén en package.json
+- Conservar el nombre, la firma y el tipo de retorno exportados de fetchOrders(), salvo que el tipo de retorno actual contradiga la forma real de la API; en ese caso, detenerse y preguntar
+- No ejecutar el servidor de desarrollo ni hacer peticiones reales a la API
+
+Hecho cuando:
+- fetchOrders() hace la petición al endpoint indicado con la clave leída de ORDERS_API_KEY
+- El proyecto compila sin errores de tipos (tsc --noEmit o el comando de tipos del proyecto)
+- Resumen final con los cambios hechos en cada archivo modificado
+- Si falta algún dato entre corchetes, detenerse y preguntar en vez de inventarlo
+```
+
+🎯 Target: Cursor · 💡 Plantilla de alcance por archivo con la clave leída desde variable de entorno y los datos desconocidos de la API como campos a completar, para que el agente no invente el endpoint.
+
+Credenciales eliminadas. Define ORDERS_API_KEY como variable de entorno (p. ej. en tu .env local, fuera del control de versiones) en lugar de incrustarla en prompts. Como la clave se pegó en este chat, considera rotarla.
+
+Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo. Confirma que las rutas de archivos, directorios y permisos coinciden con el proyecto real.

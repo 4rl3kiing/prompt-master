@@ -1,0 +1,5 @@
+"Toda la app con todo incluido" es demasiado grande para un solo prompt: Claude Code se descontrola y gasta créditos. Lo correcto es dividirlo en prompts secuenciales (base, modelo de datos, API, interfaz, pruebas), y para escribir el primero necesito 3 datos:
+
+1. ¿Qué base de datos quieres usar (SQLite, PostgreSQL, MongoDB u otra)? ¿Y qué ORM o librería, si tienes preferencia?
+2. ¿Qué es lo que "todo incluido" significa para ti? Indica qué módulos quieres (por ejemplo: productos, categorías, proveedores, movimientos de entrada/salida, alertas de stock mínimo, reportes, importación/exportación CSV) y si hay varias bodegas.
+3. ¿Cómo quieres la interfaz y el acceso: solo API REST, o también frontend (¿con qué: HTML simple, React, otro?), y con o sin login y roles de usuario?

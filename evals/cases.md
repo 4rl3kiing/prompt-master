@@ -32,3 +32,11 @@ Casos para comprobar el skill a mano (pegar la entrada en Claude con el skill ac
 ## Evals automáticos
 `evals/cases.json` repite estos casos con comprobaciones por expresión regular. Guarda la salida de cada caso en `evals/outputs/<id>.txt` y ejecuta `python3 -I scripts/run_evals.py`. Los casos sin salida se omiten; `--validate` solo comprueba que el archivo de casos sea correcto (lo usa `check.sh`).
 
+
+## Línea base (2026-11-08)
+Las salidas de `evals/outputs/` se generaron simulando el skill: 13 agentes independientes (modelo Sonnet), cada uno con solo `SKILL.md`, sus referencias y la petición del caso. Es un sustituto, no el skill activado en Claude real; sirve para detectar regresiones al cambiar el skill, no para medir calidad absoluta.
+
+- 12 casos pasan; 1 está marcado `xfail`.
+- **Caso 12 (hallazgo abierto):** ante "construye toda mi app" el skill hace 3 preguntas en lugar de entregar el Prompt 1 de una secuencia. Decidir si debe entregar el primer prompt y listar el resto, o si preguntar es lo deseado; hasta entonces queda como `xfail`.
+- Los casos 2 y 5 se reformularon tras ver que su entrada original no daba datos suficientes (el skill preguntó, que es lo correcto); los casos 1, 4, 6, 8 y 10 se ajustaron porque la regex solo buscaba inglés o aplicaba la prohibición también a la nota explicativa.
+- Para regenerar: repetir la simulación y sobrescribir `evals/outputs/<id>.txt`, luego `python3 -I scripts/run_evals.py`.

@@ -1,0 +1,17 @@
+POSITIVE PROMPT:
+```
+traditional oil painting of a tall stone lighthouse on a rocky cliff during a violent storm, massive waves crashing against the rocks with white spray, dark churning sky of heavy storm clouds, powerful beam of warm yellow light cutting through rain and mist, dramatic chiaroscuro, thick impasto brushstrokes, visible palette knife texture, rich oil paint on canvas, deep teal and slate gray sea, warm amber lighthouse glow, wide composition with the lighthouse off-center on the right, romantic marine painting in the style of J.M.W. Turner and Ivan Aivazovsky, highly detailed, masterpiece
+```
+
+NEGATIVE PROMPT:
+```
+photo, photograph, photorealistic, 3d render, digital art, cartoon, anime, flat colors, smooth gradients, sunny sky, calm sea, blurry, low quality, jpeg artifacts, oversaturated, text, watermark, signature, frame, border, people, boats, deformed, distorted, extra towers
+```
+
+CHECKPOINT: SDXL
+SAMPLER: DPM++ 2M Karras (or Euler a)
+CFG SCALE: 7
+STEPS: 30-40
+RESOLUTION: 1216 x 832 (landscape, divisible by 64; use 1024 x 1024 if you prefer square)
+
+🎯 Target: ComfyUI (SDXL) · 💡 Prompt en inglés porque SDXL responde mejor a él; combina lenguaje natural con términos de técnica al óleo (impasto, chiaroscuro) y un negativo que bloquea el aspecto fotográfico/digital para mantener el estilo pictórico.

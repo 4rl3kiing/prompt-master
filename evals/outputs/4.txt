@@ -1,0 +1,22 @@
+```
+Determina la ruta de reparto que minimiza [DISTANCIA TOTAL / TIEMPO TOTAL] y visita cada una de estas 12 ciudades exactamente una vez.
+
+Punto de partida: [CIUDAD DE ORIGEN]
+¿Regreso al origen?: [SÍ / NO]
+Ciudades: [LISTA DE LAS 12 CIUDADES]
+Datos de distancia o tiempo: [MATRIZ ADJUNTA / "usa distancias por carretera aproximadas"]
+Restricciones: [VENTANAS HORARIAS, LÍMITE DE KM POR DÍA, VEHÍCULO, ETC. / "ninguna"]
+
+Entrega, en este orden:
+1. Ruta final: lista numerada de ciudades con la distancia o el tiempo de cada tramo y el total.
+2. Supuestos: máximo 5 viñetas. Marca con [estimado] cualquier distancia que no provenga de los datos entregados. No inventes datos.
+3. Criterio de decisión: máximo 3 frases sobre por qué esta ruta supera a la mejor alternativa que consideraste.
+4. Verificación: confirma que aparecen las 12 ciudades, sin repetir ninguna, y que el total coincide con la suma de los tramos.
+5. Incertidumbre: si la ruta es solo una buena aproximación y no un óptimo comprobado, indícalo.
+
+Longitud máxima: 250 palabras.
+```
+
+🎯 Target: o3 · 💡 Quité "piensa paso a paso" y la petición de la cadena de pensamiento completa (degradan a los modelos de razonamiento y no se debe pedir razonamiento oculto), y las sustituí por un criterio de optimización, datos de entrada, formato fijo, verificación auditable y límite de longitud en lugar de "sé muy detallado".
+
+Rellena los corchetes con tus datos, sobre todo la lista de las 12 ciudades, que en tu prompt original no aparecía.

@@ -1,0 +1,4 @@
+Para armarte un prompt que funcione a la primera necesito dos datos:
+
+1. ¿Para qué herramienta es? (por ejemplo Claude, ChatGPT, Cursor, Midjourney, Sora, etc.)
+2. ¿Qué quieres que haga o produzca esa herramienta? (una frase basta)

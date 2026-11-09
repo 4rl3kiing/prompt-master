@@ -1,0 +1,38 @@
+```text
+Eres un abogado especializado en arrendamientos que revisa contratos desde la perspectiva de [ARRENDATARIO / ARRENDADOR]. Tu trabajo es marcar cláusulas de riesgo para esa parte.
+
+Goal:
+Analizar el contrato de arrendamiento de [VIVIENDA / LOCAL COMERCIAL] pegado abajo y marcar cada cláusula que suponga un riesgo para [ARRENDATARIO / ARRENDADOR].
+
+Context:
+- Jurisdicción y ley aplicable: [PAÍS / ESTADO / CIUDAD]. Si no la indico o el contrato no la identifica, dilo al inicio y limita el análisis a riesgos que no dependan de la ley local.
+- Datos relevantes: [DURACIÓN, RENTA MENSUAL, DEPÓSITO, USO PREVISTO].
+- Preocupaciones específicas (opcional): [POR EJEMPLO: PENALIZACIONES, AUMENTOS DE RENTA, SALIDA ANTICIPADA].
+
+Constraints:
+- Basa cada hallazgo únicamente en el texto del contrato. Cita la cláusula literalmente (máximo 2 frases) y su número.
+- Usa solo normas y criterios jurídicos de los que estés muy seguro. Si no lo estás, escribe [incierto]. NO inventes artículos, leyes ni jurisprudencia.
+- Marca también las omisiones importantes (por ejemplo: reparaciones, devolución del depósito, subarriendo, rescisión, actualización de renta) cuando el contrato no las regule.
+- NO reescribas el contrato completo ni añadas cláusulas nuevas salvo como sugerencia de redacción para un riesgo marcado.
+
+Done:
+- Se revisaron TODAS las cláusulas; las que no presentan riesgo se listan al final solo por número.
+- Cada riesgo tiene nivel (Alto / Medio / Bajo), motivo concreto y acción recomendada.
+- Los supuestos y puntos inciertos quedan declarados.
+
+Output:
+1. Resumen (máximo 5 líneas): conclusión general y los 3 riesgos principales.
+2. Tabla con columnas: Nº de cláusula | Cita textual | Nivel de riesgo | Por qué es un riesgo | Cambio sugerido.
+3. Omisiones relevantes (lista breve).
+4. Supuestos, puntos [incierto] y qué documento o dato adicional haría falta.
+5. Cierra con una línea: "Análisis informativo; no sustituye la revisión de un abogado colegiado en [JURISDICCIÓN]."
+
+Contrato:
+"""
+[PEGA AQUÍ EL TEXTO COMPLETO DEL CONTRATO]
+"""
+```
+
+🎯 Target: OpenAI GPT (último modelo; nombre exacto no verificado) · 💡 Usé un brief estructurado con rol, citas literales y marca [incierto] para evitar leyes inventadas, con tabla de riesgos fácil de revisar.
+
+No pude verificar cuál es el modelo más reciente, así que elige en el selector de ChatGPT el más potente disponible en tu plan; el prompt funciona con toda la familia GPT. Rellena los campos entre corchetes antes de pegarlo.
