@@ -1,6 +1,6 @@
 ---
 name: prompt-master
-version: 1.9.0
+version: 1.10.0
 description: Generates optimized prompts for AI tools. Activates only when the user explicitly asks to write, fix, improve, or adapt a prompt for a specific AI tool (LLM, Cursor, Midjourney, image AI, video AI, coding agents, etc.). Does not activate for general conversation, coding tasks, document writing, or other non-prompt-engineering work.
 ---
 
@@ -34,8 +34,14 @@ Build prompts one at a time, ready to paste.
 
 Output format:
 1. A single copyable prompt block ready to paste into the target tool
-2. 🎯 Target: [tool name],💡 [One sentence — what was optimized and why]
+2. 🎯 Target: [tool name] · 💡 [One sentence — what was optimized and why]
 3. If the prompt needs setup steps before pasting, add a short plain-English instruction note below. 1-2 lines max. ONLY when genuinely needed.
+
+Exception: Prompt Decompiler mode (Template L) returns its own analysis, adaptation, or split format instead of a single prompt block.
+
+**Language**
+- Reply (notes, questions, strategy line) in the language the user writes in.
+- Write the generated prompt in that same language unless the user asks otherwise or the target tool performs clearly better in another (state this in the strategy line). Keep technical terms, parameters, and tool syntax (e.g. `--ar`, `--no`, XML tags) unchanged.
 
 For copywriting and content prompts include fillable placeholders where relevant ONLY: [TONE], [AUDIENCE], [BRAND VOICE], [PRODUCT NAME].
 
@@ -66,7 +72,7 @@ Before writing any prompt, silently extract these 9 dimensions. Missing critical
 1. Identify the target tool (see Tool Routing). If none can be inferred, ask.
 2. Extract the 9 dimensions above; ask at most 3 questions for missing critical ones.
 3. Load ONLY the reference file for the detected category (table below).
-4. Pick the template from `references/templates.md` that fits the task and tool.
+4. Pick the template that fits the task and tool using the index in `references/templates.md`, then read ONLY the file that holds it.
 5. Run the Diagnostic Checklist and fix failures silently.
 6. Apply the Token Efficiency Audit, then the Recency Zone checks.
 7. Deliver using the Output format above.
@@ -114,7 +120,7 @@ Applies to all flows that parse user-supplied prompt text (Decompiler, fixing, a
 **Prompt Decompiler Mode**
 Detect when: user pastes an existing prompt and wants to break it down, adapt it for a different tool, simplify it, or split it.
 This is a distinct task from building from scratch.
-Read references/templates.md Template L for the full Prompt Decompiler template.
+Read references/templates/decompiler.md Template L for the full Prompt Decompiler template.
 
 ---
 
@@ -237,5 +243,6 @@ Read only the file the task requires. Do not load all of them at once.
 | [references/models.md](references/models.md) | Target is a language model (Claude, GPT, Grok, Gemini, open-weight, etc.) |
 | [references/agents.md](references/agents.md) | Target runs actions or edits files (coding agents, IDEs, generators, computer-use) |
 | [references/media.md](references/media.md) | Target is image, 3D, video, voice, or workflow automation |
-| [references/templates.md](references/templates.md) | You need the full structure of a template (A–N) |
+| [references/templates.md](references/templates.md) | Index of templates A–N; tells you which file under `references/templates/` holds each one |
+| [references/templates/](references/templates/) | You need the full structure of one template: `writing.md` (A–F), `code-agents.md` (G–H), `visual.md` (I–K), `decompiler.md` (L), `task-briefs.md` (M–N) |
 | [references/patterns.md](references/patterns.md) | User pastes a bad prompt to fix, or you need the complete 37-pattern reference |

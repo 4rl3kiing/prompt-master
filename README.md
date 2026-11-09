@@ -284,97 +284,18 @@ Prompt Master only uses techniques with reliable, bounded effects. Methods known
 
 ---
 
-## 🚫 37 Credit-Killing Patterns Detected (with Before/After Examples)
+## 🚫 37 Credit-Killing Patterns Detected
 
-<details>
-<summary><h3> Task Patterns (7)</h3></summary>
+The full before/after table lives in one place: [references/patterns.md](references/patterns.md). Summary:
 
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 1 | **Vague task verb** | "help me with my code" | "Refactor `getUserData()` to use async/await and handle null returns" |
-| 2 | **Unrelated tasks in one prompt** | "fix login and write a sales email" | Split unrelated outcomes; combine related work with shared acceptance criteria |
-| 3 | **No success criteria** | "make it better" | "Done when function passes existing unit tests and handles null input" |
-| 4 | **Over-permissive agent** | "do whatever it takes" | Explicit allowed + forbidden actions list |
-| 5 | **Emotional task description** | "it's totally broken, fix everything" | "Throws uncaught TypeError on line 43 when `user` is null" |
-| 6 | **Build-the-whole-thing** | "build my entire app" | Break into Prompt 1 (scaffold), Prompt 2 (feature), Prompt 3 (polish) |
-| 7 | **Implicit reference** | "now add the other thing we discussed" | Always restate the full task, never reference "the thing we discussed" |
-
-</details>
-
-<details>
-<summary><h3> Context Patterns (6)</h3></summary>
-
-### Context Patterns
-
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 8 | **Assumed prior knowledge** | "continue where we left off" | Include Memory Block with all prior decisions |
-| 9 | **No project context** | "write a cover letter" | "PM role at B2B fintech, 2yr SWE experience, shipped 3 features as tech lead" |
-| 10 | **Forgotten stack** | New prompt contradicts prior tech choice | Always include Memory Block |
-| 11 | **Hallucination invite** | "what do experts say about X?" | "Cite only sources you are certain of. If uncertain, say so." |
-| 12 | **Undefined audience** | "write something for users" | "Non-technical B2B buyers, no coding knowledge, decision-maker level" |
-| 13 | **No mention of prior failures** | (blank) | "I already tried X and it failed because Y. Do not suggest X." |
-
-</details>
-
-
-<details>
-<summary><h3> Format Patterns (6)</h3></summary>
-
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 14 | **Missing output format** | "explain this concept" | "3 bullet points, each under 20 words, one-sentence summary at top" |
-| 15 | **Implicit length** | "write a summary" | "Write a summary in exactly 3 sentences" |
-| 16 | **Missing domain perspective** | Specialized task without domain context | Add an expert role only when it changes the result |
-| 17 | **Vague aesthetic adjectives** | "make it look professional" | "Monochrome palette, 16px base font, 24px line height, no decorative elements" |
-| 18 | **No negative prompts (image AI)** | "a portrait of a woman" | Add: "no watermark, no blur, no extra fingers, no distortion, no text" |
-| 19 | **Prose prompt for Midjourney** | Full descriptive sentence | "subject, style, mood, lighting, --ar 16:9 --v 6" |
-
-</details>
-
-
-<details>
-<summary><h3> Scope Patterns (6)</h3></summary>
-
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 20 | **No scope boundary** | "fix my app" | "Fix only login form validation in `src/auth.js`. Touch nothing else." |
-| 21 | **No stack constraints** | "build a React component" | "React 18, TypeScript strict, no external libraries, Tailwind only" |
-| 22 | **No stop condition for agents** | "build the whole feature" | Explicit stop conditions + meaningful milestones and verification evidence |
-| 23 | **No file path for IDE AI** | "update the login function" | "Update `handleLogin()` in `src/pages/Login.tsx` only" |
-| 24 | **Wrong template for tool** | GPT-style prose used in Cursor | Adapted to File-Scope Template with path + scope |
-| 25 | **Pasting entire codebase** | Full repo context every prompt | Scoped to relevant function and file only |
-
-</details>
-
-
-<details>
-<summary><h3> Reasoning Patterns (5)</h3></summary>
-
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 26 | **No audit contract for logic task** | "which approach is better?" | Request the recommendation, assumptions, criteria, evidence, and checks |
-| 27 | **Requesting hidden reasoning** | "show your chain of thought" | Ask for a concise rationale, evidence, and verification instead |
-| 28 | **Expecting inter-session memory** | "you already know my project" | Re-provide the Memory Block in every new session |
-| 29 | **Contradicting prior work** | New prompt ignores earlier architecture | Include established decisions in the Memory Block |
-| 30 | **No grounding rule for factual tasks** | "summarize what experts say about X" | Require verifiable sources and explicit uncertainty |
-
-</details>
-
-<details>
-<summary><h3> Agentic Patterns (7)</h3></summary>
-
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 31 | **No starting state** | "build me a REST API" | "Empty Node.js project, Express installed, `src/app.js` exists" |
-| 32 | **No target state** | "add authentication" | "`/src/middleware/auth.js` with JWT verify. `POST /login` and `POST /register` in `/src/routes/auth.js`" |
-| 33 | **Silent agent** | No progress output | "Report meaningful milestones, blockers, and final verification results" |
-| 34 | **Unlocked filesystem** | No file restrictions | "Only edit files inside `src/`. Do not touch `package.json`, `.env`, or any config file." |
-| 35 | **No human review trigger** | Agent decides everything | "Stop and ask before: deleting any file, adding any dependency, or touching the database schema" |
-| 36 | **Vague first turn for an agentic model** | "fix the auth bug" with no scope, files, or criteria | Front-load outcome, context, scope, boundaries, and acceptance criteria |
-| 37 | **Context rot on long sessions** | Repeated corrections leave stale assumptions in context | Start fresh for unrelated work or compact around current decisions and state |
-
-</details>
+| Category | # | Examples |
+|----------|---|----------|
+| Task | 1–7 | vague verb, unrelated tasks in one prompt, no success criteria, over-permissive agent |
+| Context | 8–13 | assumed prior knowledge, hallucination invite, undefined audience, no prior failures |
+| Format | 14–19 | missing output format, implicit length, vague aesthetic adjectives, no negative prompts |
+| Scope | 20–25 | no scope boundary, no file path for IDE AI, wrong template for tool, pasting the whole codebase |
+| Reasoning | 26–30 | no audit contract, requesting hidden reasoning, expecting inter-session memory |
+| Agentic | 31–37 | no starting/target state, silent agent, unlocked filesystem, no human review trigger, context rot |
 
 ---
 
@@ -399,34 +320,31 @@ This is the single biggest fix for long sessions. Most wasted re-prompts come fr
 
 ```
 prompt-master/
-├── SKILL.md                  # Core: rules, intent extraction, routing table, diagnostics, verification
+├── SKILL.md                  # Core: rules, language, intent extraction, routing table, diagnostics, verification
+├── CHANGELOG.md              # Version history
 ├── references/
 │   ├── models.md             # Language-model profiles (Claude, GPT, Grok, Gemini, open-weight…)
 │   ├── agents.md             # Coding agents, IDEs, generators, computer-use agents
 │   ├── media.md              # Image, 3D, video, voice, workflow automation
-│   ├── templates.md          # Templates A–N
-│   └── patterns.md           # 37 credit-killing patterns
-├── evals/cases.md            # Behavior checks: input → what the output must satisfy
-└── scripts/check.sh          # Consistency check (version, links, counts, split integrity)
+│   ├── templates.md          # Index of templates A–N
+│   ├── templates/            # writing (A–F), code-agents (G–H), visual (I–K), decompiler (L), task-briefs (M–N)
+│   └── patterns.md           # 37 credit-killing patterns (single source)
+├── evals/
+│   ├── cases.md              # Human-readable behavior checks
+│   └── cases.json            # Machine-checkable assertions (see scripts/run_evals.py)
+├── scripts/
+│   ├── check.sh              # Consistency check (versions, links, counts, structure)
+│   └── run_evals.py          # Validates saved outputs against evals/cases.json
+└── .github/workflows/check.yml   # Runs check.sh on every push and pull request
 ```
 
-Only `SKILL.md` loads on activation. Profile files load on demand, one per request, which keeps the context small and every response faster and cheaper. Run `bash scripts/check.sh` after any edit.
+Only `SKILL.md` loads on activation. Profile files load on demand, one per request, which keeps the context small and every response faster and cheaper. Run `bash scripts/check.sh` after any edit; CI runs it on every pull request.
 
 ---
 
 ## ℹ️ Version History
 
-- **1.9.0** — Reorganization. Split `SKILL.md` (499 → ~220 lines) into a core file plus on-demand `references/models.md`, `agents.md`, `media.md`. Added an execution flow, a routing table, and a defined Token Efficiency Audit. Unified the unknown-tool rule. Aligned README examples with the skill's own rules (no framework names, no token estimates, `--no` for Midjourney). Added `evals/` and `scripts/check.sh`. Model profiles carried over unchanged and not re-verified against provider docs.
-- **1.8.1–1.8.2** — Minor fixes; not documented in earlier history.
-- **1.8.0** — Current-model refresh. Added Claude Fable 5, Opus 5, Sonnet 5, GPT-5.6 Sol/Terra/Luna, Codex, and Grok 4.6 routing. Replaced hidden chain-of-thought requests with auditable reasoning and generalized the Claude task brief for current adaptive-thinking models.
-- **1.7.0** — Opus 4.8 compatibility. Made Claude 4.x routing version-aware: durable advice generalized across 4.6/4.7/4.8, added Opus 4.8 (current default) profile, kept Opus 4.7 labeled. De-hardcoded the effort-level note (now harness-managed). Template M and pattern 36 cover 4.7 and 4.8. Fixed a stray fragment in patterns.md.
-- **1.6.0** — Opus 4.7 update. Added Template M (Opus 4.7 Task Brief). Updated Claude and Claude Code routing for literalism, adaptive thinking, xhigh effort, and session hygiene. Added patterns 36–37.
-- **1.5.0** — Added more tool routing. New Agentic AI and 3D Model AI routing added. Fixed description to 189 chars. Removed token estimate from output. Added instruction layer and copywriting placeholders
-- **1.4.0** — Added reference image editing detection, ComfyUI support, Prompt Decompiler mode. Fixed trigger description to invoke correctly in Claude Code. 3 new templates added to references folder
-- **1.3.0** — Rebuilt around PAC2026 positional structure (30/55/15). Silent routing replaces user-facing framework selection. References folder introduced
-- **1.2.0** — Restructured for attention architecture. Removed fabrication-prone techniques (ToT, GoT, USC, prompt chaining). Templates and patterns moved to references folder
-- **1.1.0** — Expanded tool coverage, added memory block system, 35 credit killing patterns
-- **1.0.0** — Initial release
+See [CHANGELOG.md](CHANGELOG.md). Current version: **1.10.0**.
 
 ---
 
@@ -436,7 +354,13 @@ MIT: See [LICENSE](LICENSE) for details.
 
 ---
 
-## ⭐ Star History
+## 🙏 Credits
+
+Fork of [nidhinjs/prompt-master](https://github.com/nidhinjs/prompt-master) by Nidhin Joseph Nelson (MIT). Original copyright notice preserved in [LICENSE](LICENSE).
+
+---
+
+## ⭐ Upstream Star History
 
 [![Star History Chart](https://star-history.dera.page/svg?repos=nidhinjs/prompt-master&type=Date)](https://star-history.dera.page/#nidhinjs/prompt-master&Date)
 
