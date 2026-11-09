@@ -17,14 +17,14 @@ First detect: generation from scratch or editing an existing image?
 **Image AI — Reference Editing** (when user has an existing image to modify)
 Detect when: user mentions "change", "edit", "modify", "adjust" anything in an existing image, or uploads a reference.
 Always instruct the user to attach the reference image to the tool first. Build the prompt around the delta ONLY — what changes, what stays the same.
-Read references/templates.md Template J for the full reference editing template.
+Read references/templates/visual.md Template J for the full reference editing template.
 
 ---
 
 **ComfyUI**
 Node-based workflow — not a single prompt box. Ask which checkpoint model is loaded before writing.
 Always output two separate blocks: Positive Prompt and Negative Prompt. Never merge them.
-Read references/templates.md Template K for the full ComfyUI template.
+Read references/templates/visual.md Template K for the full ComfyUI template.
 
 ---
 
@@ -47,7 +47,7 @@ Read references/templates.md Template K for the full ComfyUI template.
 ---
 
 **Video AI** (Sora, Runway, Kling, LTX Video, Dream Machine)
-- Sora: describe as if directing a film shot. Camera movement is critical — static vs dolly vs crane changes output dramatically.
+- Sora: describe as if directing a film shot. Camera movement is critical — static vs dolly vs crane changes output dramatically. Add duration in seconds and cut style (e.g. slow dolly, static shot, crane up).
 - Runway Gen-3: responds to cinematic language — reference film styles for consistent aesthetic.
 - Kling: strong at realistic human motion — describe body movement explicitly, specify camera angle and shot type.
 - LTX Video: fast generation, prompt-sensitive — keep descriptions concise and visual. Specify resolution and motion intensity explicitly.

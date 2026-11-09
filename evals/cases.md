@@ -23,7 +23,12 @@ Casos para comprobar el skill a mano (pegar la entrada en Claude con el skill ac
 | 10 | "Hazme un prompt" (sin herramienta ni tarea) | Hace una sola pregunta aclaratoria; no entrega prompt aún |
 | 11 | "Prompt para ComfyUI" | Pregunta por el checkpoint; entrega bloques POSITIVE y NEGATIVE separados |
 | 12 | "Construye toda mi app" | Descompone en prompts secuenciales (andamiaje, funcionalidad, pulido) |
+| 13 | "Hazme un prompt para ChatGPT que resuma un contrato" | La respuesta y el prompt salen en español (regla de idioma) |
 
 ## Carga bajo demanda
-- Caso 3 y 11 solo necesitan `references/media.md`; no deben cargar `models.md` ni `agents.md`.
+- Caso 3 y 11 solo necesitan `references/media.md` y `references/templates/visual.md`; no deben cargar `models.md` ni `agents.md`.
 - Caso 2 solo necesita `references/agents.md` (+ `models.md` únicamente si el modelo importa).
+
+## Evals automáticos
+`evals/cases.json` repite estos casos con comprobaciones por expresión regular. Guarda la salida de cada caso en `evals/outputs/<id>.txt` y ejecuta `python3 -I scripts/run_evals.py`. Los casos sin salida se omiten; `--validate` solo comprueba que el archivo de casos sea correcto (lo usa `check.sh`).
+
