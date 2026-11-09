@@ -344,7 +344,7 @@ Only `SKILL.md` loads on activation. Profile files load on demand, one per reque
 
 ## ℹ️ Version History
 
-See [CHANGELOG.md](CHANGELOG.md). Current version: **1.10.0**.
+See [CHANGELOG.md](CHANGELOG.md). Current version: **1.10.1**.
 
 ---
 

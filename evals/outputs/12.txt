@@ -1,0 +1,7 @@
+Antes de escribir el prompt necesito tres datos, porque "toda la app con todo incluido" es demasiado amplio para que Claude Code lo construya bien de una sola vez:
+
+1. ¿Qué módulos necesitas en la primera versión? (por ejemplo: productos/SKU, entradas y salidas de stock, proveedores, alertas de stock mínimo, usuarios y roles, reportes, exportación CSV)
+2. ¿Qué base de datos y qué interfaz quieres? (por ejemplo: SQLite/PostgreSQL/MongoDB, y solo API REST o también un frontend web)
+3. ¿Qué tipo de inventario es y cuántos usuarios lo usarán? (tienda, almacén, taller...; un usuario o varios con login)
+
+Con eso divido la app en prompts secuenciales (base de datos y API, luego lógica de stock, luego interfaz) y te los entrego uno a uno, listos para pegar.

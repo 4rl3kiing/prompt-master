@@ -2,6 +2,7 @@
 
 Formato: una entrada por versión, la más reciente primero.
 
+- **1.10.1** — Made the whole-app rule explicit: ask the critical questions first (max 3), then decompose into sequential prompts delivered one at a time. Matches existing behavior; documents the decision. Added a 13-case simulated eval baseline (`evals/outputs/`) and an extended `scripts/run_evals.py`.
 - **1.10.0** — Added a language rule (reply and prompt follow the user's language). Split `references/templates.md` into an index plus five files under `references/templates/`. README patterns section now summarizes and links to `references/patterns.md` (single source). Moved history to this file. Added fork credit, GitHub Actions check, and machine-checkable evals (`evals/cases.json`, `scripts/run_evals.py`). Clarified that Decompiler mode returns its own format.
 - **1.9.0** — Reorganization. Split `SKILL.md` (499 → ~220 lines) into a core file plus on-demand `references/models.md`, `agents.md`, `media.md`. Added an execution flow, a routing table, and a defined Token Efficiency Audit. Unified the unknown-tool rule. Aligned README examples with the skill's own rules (no framework names, no token estimates, `--no` for Midjourney). Added `evals/` and `scripts/check.sh`. Model profiles carried over unchanged and not re-verified against provider docs.
 - **1.8.1–1.8.2** — Minor fixes; not documented in earlier history.

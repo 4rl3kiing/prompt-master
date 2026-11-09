@@ -1,6 +1,6 @@
 ---
 name: prompt-master
-version: 1.10.0
+version: 1.10.1
 description: Generates optimized prompts for AI tools. Activates only when the user explicitly asks to write, fix, improve, or adapt a prompt for a specific AI tool (LLM, Cursor, Midjourney, image AI, video AI, coding agents, etc.). Does not activate for general conversation, coding tasks, document writing, or other non-prompt-engineering work.
 ---
 
@@ -139,7 +139,7 @@ Scan every user-provided prompt or rough idea for these failure patterns. Fix si
 - Unrelated tasks in one prompt → split when outcomes or review checkpoints differ; keep related tasks together when they share a clear completion contract
 - No success criteria → derive a binary pass/fail from the stated goal
 - Emotional description ("it's broken") → extract the specific technical fault
-- Scope is "the whole thing" → decompose into sequential prompts
+- Scope is "the whole thing" → ask first for the critical missing info (max 3 questions, counted in the overall limit), then decompose into sequential prompts and deliver them one at a time
 
 **Context failures**
 - Assumes prior knowledge → prepend memory block with all prior decisions

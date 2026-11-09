@@ -1,0 +1,50 @@
+```
+## Objetivo
+Añadir autenticación JWT a la API Express existente: /login emite un token firmado y un middleware protege las rutas privadas, dejando /login y /register públicas.
+
+## Contexto
+- Node 20, Express. Las rutas están en src/routes/ y /login y /register ya existen, sin ninguna protección ni emisión de token.
+- Antes de editar, inspecciona con herramientas: src/routes/, el punto de entrada (donde se monta el router), el módulo de acceso a usuarios, el gestor de módulos (CommonJS o ESM), el framework de tests y los scripts de package.json. Basa cada decisión en lo que encuentres; no asumas la estructura.
+
+## Estado final
+- /login valida credenciales con la lógica existente y responde con un JWT firmado (HS256) con expiración de 1 hora y el id de usuario en el claim `sub`.
+- Existe un middleware de autenticación que lee `Authorization: Bearer <token>`, verifica firma y expiración, adjunta el usuario a `req.user` y responde 401 con JSON `{ "error": "..." }` si el token falta, es inválido o está caducado.
+- El middleware se aplica a todas las rutas de src/routes/ excepto /login y /register.
+- El secreto se lee de `process.env.JWT_SECRET`. Si falta, la app falla al arrancar con un mensaje claro.
+- Hay tests que cubren: login correcto devuelve token, token válido accede a una ruta protegida, sin token da 401, token caducado da 401, token con firma alterada da 401, /register y /login siguen accesibles sin token.
+
+## Alcance
+- Trabaja solo en: src/routes/, el punto de entrada de la app, un nuevo src/middleware/auth.js (o .ts/.mjs según el proyecto), la carpeta de tests existente, package.json y .env.example.
+- NO toques: .env, archivos de lock, configuración de CI/Docker, esquema de base de datos, ni rutas ajenas a la autenticación.
+
+## Restricciones
+- La única dependencia nueva permitida es `jsonwebtoken`. Cualquier otra requiere preguntar antes.
+- Sigue el estilo del código existente (módulos, nombres, manejo de errores).
+- Solo haz los cambios pedidos. No añadas refresh tokens, roles, rate limiting, cookies ni refactors.
+- NUNCA escribas el valor del secreto en el código, en los tests ni en logs; los tests definen `JWT_SECRET` por variable de entorno. Añade solo el nombre `JWT_SECRET=` vacío a .env.example.
+- NUNCA devuelvas ni registres contraseñas ni hashes en las respuestas.
+
+## Criterios de aceptación
+- [ ] `npm test` pasa, incluidos los nuevos tests.
+- [ ] Una petición sin token a una ruta protegida devuelve 401.
+- [ ] /register y /login responden sin token.
+- [ ] No queda ningún secreto escrito en el código.
+- [ ] `git diff --stat` solo muestra archivos dentro del alcance.
+
+## Límites de acción
+- Procede sin preguntar con inspección, ediciones y tests dentro del alcance.
+- Detente y pregunta antes de: instalar una dependencia distinta de `jsonwebtoken`, borrar archivos, tocar el esquema de base de datos, o cambiar cómo se almacenan las contraseñas. Si descubres que las contraseñas están en texto plano, detente e infórmame en vez de corregirlo por tu cuenta.
+- Si dos intentos seguidos de arreglar el mismo test fallan, detente y resume el bloqueo.
+
+## Evidencia de progreso
+Informa solo al terminar cada fase (inspección, middleware, rutas, tests). Respalda cada afirmación de "hecho" con la salida real de un comando o el diff. Al final entrega: archivos modificados, salida de `npm test` y cualquier decisión que tomaste y que yo deba revisar.
+
+## Estrategia de sesión
+Sesión nueva: no depende de contexto previo.
+```
+
+🎯 Target: Claude Code · 💡 Brief estructurado con alcance acotado, una única dependencia permitida, tests concretos como criterio de éxito y condiciones de parada, porque el agente edita archivos y ejecuta comandos reales.
+
+Antes de pegarlo, define `JWT_SECRET` en tu entorno local (no lo escribas en el prompt).
+
+Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo. Confirma que las rutas, directorios y permisos coinciden con el proyecto real.

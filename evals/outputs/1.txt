@@ -1,0 +1,35 @@
+```
+Archivo/Directorio: [ruta/exacta/al/módulo/auth, p. ej. src/auth/]
+Función/Componente: [funciones o clases públicas del módulo, p. ej. login, refreshToken, AuthService]
+
+Comportamiento actual:
+[Qué hace hoy el módulo y qué problema concreto tiene: p. ej. lógica de sesión duplicada en 3 archivos, funciones de más de 80 líneas, mezcla de validación, acceso a BD y emisión de tokens en un mismo archivo]
+
+Cambio deseado:
+Refactorizar el módulo para separar responsabilidades (validación de entrada, acceso a datos, emisión/verificación de tokens, middleware/guards), eliminar código duplicado y dar nombres claros a funciones y variables internas. El comportamiento externo MUST permanecer idéntico: mismas rutas, mismas respuestas, mismos códigos de error, mismos nombres y firmas exportados.
+
+Alcance:
+Solo modificar archivos dentro de [ruta/exacta/al/módulo/auth].
+NO tocar: otros módulos, migraciones y esquema de base de datos, archivos de configuración, CI, variables de entorno, ni los tests existentes (salvo añadir tests nuevos).
+NEVER cambiar la lógica de hashing, expiración de tokens, ni reglas de autorización; si un cambio las afectara, detente y pregunta.
+
+Restricciones:
+- Lenguaje/framework: [p. ej. TypeScript 5.x, Node 20, Express 4]
+- NO añadir dependencias que no estén en [package.json / requirements.txt]
+- Conservar firmas de tipos, contratos de API públicos y nombres exportados
+- Realizar el refactor en pasos pequeños y mostrar el diff antes de eliminar cualquier archivo
+
+Detenerse y preguntar antes de: eliminar archivos, añadir dependencias, cambiar el esquema de base de datos, o resolver una ambigüedad que afecte a la arquitectura.
+
+Hecho cuando:
+1. Los tests existentes del módulo pasan sin modificarlos: [comando, p. ej. npm test -- auth]
+2. El linter y el type-check pasan sin errores nuevos: [comando]
+3. No hay cambios en la API pública del módulo (verificado comparando exports antes y después)
+4. Resumen final con la lista de cada archivo modificado, creado o movido, y el resultado real de los comandos anteriores
+```
+
+🎯 Target: Cursor · 💡 Plantilla de alcance por archivo con refactor que preserva el comportamiento, lista de "no tocar" y criterios de finalización verificables para que el agente no se salga del módulo.
+
+Rellena los corchetes (ruta, stack y comandos de test) antes de pegar.
+
+Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo. Confirma que las rutas, directorios y permisos coinciden con el proyecto real.
