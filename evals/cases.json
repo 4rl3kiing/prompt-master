@@ -149,11 +149,10 @@
       "input": "Construye toda mi app",
       "loads": [],
       "must_match": [
-        "Prompt 1",
-        "Prompt 2"
+        "(?i)(secuencia|sequential|prompts? (secuencial|separad)|dividir|dividirlo)"
       ],
       "must_not_match": [],
-      "xfail": "Hallazgo: ante una petición de app completa el skill pregunta (3 preguntas) en vez de entregar el Prompt 1 de una secuencia. Decisión de comportamiento pendiente."
+      "type": "question"
     },
     {
       "id": 13,

@@ -22,7 +22,7 @@ Casos para comprobar el skill a mano (pegar la entrada en Claude con el skill ac
 | 9 | "Continúa donde lo dejamos" con historial de decisiones | Antepone el bloque `## Context (carry forward)` en el primer 30 % |
 | 10 | "Hazme un prompt" (sin herramienta ni tarea) | Hace una sola pregunta aclaratoria; no entrega prompt aún |
 | 11 | "Prompt para ComfyUI" | Pregunta por el checkpoint; entrega bloques POSITIVE y NEGATIVE separados |
-| 12 | "Construye toda mi app" | Descompone en prompts secuenciales (andamiaje, funcionalidad, pulido) |
+| 12 | "Construye toda mi app" | Pregunta primero lo crítico (máx. 3) y anuncia la descomposición en prompts secuenciales |
 | 13 | "Hazme un prompt para ChatGPT que resuma un contrato" | La respuesta y el prompt salen en español (regla de idioma) |
 
 ## Carga bajo demanda
@@ -36,7 +36,7 @@ Casos para comprobar el skill a mano (pegar la entrada en Claude con el skill ac
 ## Línea base (2026-11-08)
 Las salidas de `evals/outputs/` se generaron simulando el skill: 13 agentes independientes (modelo Sonnet), cada uno con solo `SKILL.md`, sus referencias y la petición del caso. Es un sustituto, no el skill activado en Claude real; sirve para detectar regresiones al cambiar el skill, no para medir calidad absoluta.
 
-- 12 casos pasan; 1 está marcado `xfail`.
-- **Caso 12 (hallazgo abierto):** ante "construye toda mi app" el skill hace 3 preguntas en lugar de entregar el Prompt 1 de una secuencia. Decidir si debe entregar el primer prompt y listar el resto, o si preguntar es lo deseado; hasta entonces queda como `xfail`.
+- Los 13 casos pasan.
+- **Caso 12 (decidido):** ante "construye toda mi app" el skill pregunta primero (máx. 3 preguntas) y luego descompone en prompts secuenciales. Decisión del operador, 2026-11-08: mantener las preguntas primero (más preciso, una vuelta más). Se explicitó en `SKILL.md` v1.10.1.
 - Los casos 2 y 5 se reformularon tras ver que su entrada original no daba datos suficientes (el skill preguntó, que es lo correcto); los casos 1, 4, 6, 8 y 10 se ajustaron porque la regex solo buscaba inglés o aplicaba la prohibición también a la nota explicativa.
 - Para regenerar: repetir la simulación y sobrescribir `evals/outputs/<id>.txt`, luego `python3 -I scripts/run_evals.py`.
