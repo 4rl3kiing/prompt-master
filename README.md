@@ -20,7 +20,7 @@ A Claude skill that writes the accurate prompts for any AI tool. Zero tokens or 
 
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/nidhinjs/prompt-master.git ~/.claude/skills/prompt-master
+git clone https://github.com/4rl3kiing/prompt-master.git ~/.claude/skills/prompt-master
 ```
 
 ## 🔥 The Problem This Solves
@@ -104,10 +104,9 @@ lone samurai standing in heavy rain at night, traditional armor,
 neon reflections on wet cobblestone street, cinematic lighting, 
 dramatic shadows, fog, ultra detailed, photorealistic, 
 shallow depth of field --ar 16:9 --v 6 --style raw
-
-negative: blurry, low quality, watermark, cartoon, anime, extra limbs
+--no blurry, low quality, watermark, cartoon, anime, extra limbs
 ```
-**🎯 Target:** Midjourney · **⚡ Framework:** Visual Descriptor · **💰 Tokens:** Light (~60) · **💡 Strategy:** Comma-separated descriptors over prose, lighting and mood anchored early, aspect ratio and version locked, negative prompt prevents style drift.
+**🎯 Target:** Midjourney · **💡 Strategy:** Comma-separated descriptors over prose, lighting and mood anchored early, aspect ratio and version locked, negative prompt prevents style drift.
 
 ---
 ## Full Example #2: Generating Prompts for Coding
@@ -188,7 +187,7 @@ Done When:
 - Hover states work on all interactive elements
 - Opens in browser with zero console errors
 ```
-**🎯 Target:** Claude Code · **💰 Tokens:** Medium (~380) · **💡 Strategy:** Every vague Notion aesthetic cue translated into exact hex values and pixel specs — Claude Code cannot guess wrong. Animations defined with exact timing, method, and trigger so there is no interpretation needed.
+**🎯 Target:** Claude Code · **💡 Strategy:** Every vague Notion aesthetic cue translated into exact hex values and pixel specs — Claude Code cannot guess wrong. Animations defined with exact timing, method, and trigger so there is no interpretation needed.
 
 ---
 
@@ -384,7 +383,7 @@ Prompt Master only uses techniques with reliable, bounded effects. Methods known
 When your conversation has history, Prompt Master pulls out prior decisions and prepends a Memory Block so the AI never contradicts earlier work:
 
 ```
-## Memory (Carry Forward from Previous Context)
+## Context (carry forward)
 - Stack: React 18 + TypeScript + Supabase
 - Auth uses JWT stored in httpOnly cookies, not localStorage
 - Component naming convention: PascalCase, no default exports
@@ -396,8 +395,29 @@ This is the single biggest fix for long sessions. Most wasted re-prompts come fr
 
 ---
 
+## 🗂️ Repository Structure
+
+```
+prompt-master/
+├── SKILL.md                  # Core: rules, intent extraction, routing table, diagnostics, verification
+├── references/
+│   ├── models.md             # Language-model profiles (Claude, GPT, Grok, Gemini, open-weight…)
+│   ├── agents.md             # Coding agents, IDEs, generators, computer-use agents
+│   ├── media.md              # Image, 3D, video, voice, workflow automation
+│   ├── templates.md          # Templates A–N
+│   └── patterns.md           # 37 credit-killing patterns
+├── evals/cases.md            # Behavior checks: input → what the output must satisfy
+└── scripts/check.sh          # Consistency check (version, links, counts, split integrity)
+```
+
+Only `SKILL.md` loads on activation. Profile files load on demand, one per request, which keeps the context small and every response faster and cheaper. Run `bash scripts/check.sh` after any edit.
+
+---
+
 ## ℹ️ Version History
 
+- **1.9.0** — Reorganization. Split `SKILL.md` (499 → ~220 lines) into a core file plus on-demand `references/models.md`, `agents.md`, `media.md`. Added an execution flow, a routing table, and a defined Token Efficiency Audit. Unified the unknown-tool rule. Aligned README examples with the skill's own rules (no framework names, no token estimates, `--no` for Midjourney). Added `evals/` and `scripts/check.sh`. Model profiles carried over unchanged and not re-verified against provider docs.
+- **1.8.1–1.8.2** — Minor fixes; not documented in earlier history.
 - **1.8.0** — Current-model refresh. Added Claude Fable 5, Opus 5, Sonnet 5, GPT-5.6 Sol/Terra/Luna, Codex, and Grok 4.6 routing. Replaced hidden chain-of-thought requests with auditable reasoning and generalized the Claude task brief for current adaptive-thinking models.
 - **1.7.0** — Opus 4.8 compatibility. Made Claude 4.x routing version-aware: durable advice generalized across 4.6/4.7/4.8, added Opus 4.8 (current default) profile, kept Opus 4.7 labeled. De-hardcoded the effort-level note (now harness-managed). Template M and pattern 36 cover 4.7 and 4.8. Fixed a stray fragment in patterns.md.
 - **1.6.0** — Opus 4.7 update. Added Template M (Opus 4.7 Task Brief). Updated Claude and Claude Code routing for literalism, adaptive thinking, xhigh effort, and session hygiene. Added patterns 36–37.
