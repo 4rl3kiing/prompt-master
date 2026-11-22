@@ -1,86 +1,102 @@
-# Plantillas visuales (I–K)
+# Plantillas visuales (G–I)
 
-*Visual Descriptor, Reference Image Editing y ComfyUI. Cargar junto con references/media.md.*
-
----
-
-## Template I — Visual Descriptor
-
-*Use for Midjourney, DALL-E 3, Stable Diffusion, Sora, Runway, and any image or video generation tool.*
-
-```
-Subject: [Main subject — specific, not vague]
-Action/Pose: [What the subject is doing]
-Setting: [Where the scene takes place]
-Style: [photorealistic / cinematic / anime / oil painting / vector / etc.]
-Mood: [dramatic / serene / eerie / joyful / etc.]
-Lighting: [golden hour / studio / neon / overcast / candlelight / etc.]
-Color Palette: [dominant colors or named palette]
-Composition: [wide shot / close-up / aerial / Dutch angle / etc.]
-Aspect Ratio: [16:9 / 1:1 / 9:16 / 4:3]
-Negative Prompts: [blurry, watermark, extra fingers, distortion, low quality]
-Style Reference: [artist / film / aesthetic reference if applicable]
-```
-
-**Tool-specific syntax:** see `references/media.md` (Image AI — Generation, Video AI). Load it together with this template.
+*Descriptor visual, Edición con referencia y ComfyUI. Cárgalas junto con `references/media.md`: la sintaxis exacta de cada herramienta está allí. El prompt final va en inglés; las etiquetas de esta plantilla son guía para ti, no texto que se pega.*
 
 ---
 
-## Template J — Reference Image Editing
+## Template G — Descriptor visual
 
-*Use when the user has an existing image they want to modify. Completely different from generation — never describe the whole scene from scratch, only describe the change.*
-
-**Before writing the prompt, always tell the user:**
-"Attach your reference image to [tool name] before sending this prompt."
-
-**Detect the tool's editing capability:**
-- Midjourney: use `--cref [image URL]` for character reference or `--sref` for style reference
-- DALL-E 3: use the Edit endpoint, not the Generate endpoint. User must be in ChatGPT with image editing enabled
-- Stable Diffusion: use img2img mode, not txt2img. Set denoising strength 0.3-0.6 to preserve the original
+*Para generar imagen o video. Rellena mentalmente estos campos y luego escríbelos en el formato que la herramienta espera: descriptores separados por comas en Midjourney, prosa detallada en GPT Image, Nano Banana, Flux y Veo, pesos `(word:1.3)` en SD 1.5/SDXL.*
 
 ```
-Reference image: [attached / URL]
-What to keep exactly the same: [list everything that must not change]
-What to change: [specific edit only — be precise]
-How much to change: [subtle / moderate / significant]
-Style consistency: maintain the exact style, lighting, and mood of the reference
-Negative prompt: [what to avoid introducing]
+Subject: [sujeto principal, concreto]
+Action/Pose: [qué hace]
+Setting: [dónde ocurre]
+Style: [fotorrealista / cinematográfico / anime / óleo / vector…]
+Mood: [dramático / sereno / inquietante / alegre…]
+Lighting: [hora dorada / estudio / neón / nublado / velas…]
+Color palette: [colores dominantes o paleta con nombre; HEX si importa]
+Composition: [plano general / primer plano / cenital / ángulo holandés…]
+Camera (video): [movimiento, duración, tipo de toma]
+Audio (video con audio nativo): [diálogo entre comillas, efectos, ambiente]
+Aspect ratio: [16:9 / 1:1 / 9:16 / 4:5]
+Exclusions: [solo donde la herramienta las lea: --no en Midjourney, bloque negativo en SD 1.5/SDXL; en el resto, reescríbelas en positivo]
+Style reference: [artista, película o estética, si aplica]
 ```
 
-**Example:**
+**Ejemplo (Midjourney):**
 ```
-Reference image: [attached portrait photo]
-What to keep exactly the same: face, hair, clothing, background, lighting
-What to change: head angle — rotate from facing left to facing straight forward
-How much to change: subtle, preserve all facial features exactly
-Style consistency: maintain photorealistic style, same lighting direction
-Negative prompt: no new elements, no style changes, no background changes
+lone samurai standing in heavy rain at night, traditional armor, neon reflections on wet cobblestones, cinematic lighting, dramatic shadows, fog, photorealistic, shallow depth of field --ar 16:9 --raw --no text, watermark, cartoon
 ```
 
 ---
 
-## Template K — ComfyUI
+## Template H — Edición con referencia
 
-*Use for ComfyUI node-based workflows. Always output Positive and Negative prompts as separate blocks. Ask for the checkpoint model before writing — syntax and token limits differ per model.*
+*Cuando el usuario tiene una imagen y quiere modificarla. Es distinto de generar: nunca describas la escena entera, solo el cambio, y di qué debe quedar igual.*
 
-**Ask first if not stated:**
-"Which checkpoint model are you using? (SD 1.5, SDXL, Flux, or other)"
+**Antes del prompt, indica al usuario:** «Adjunta tu imagen de referencia en [herramienta] antes de pegar este prompt».
 
-**Model-specific notes:**
-- SD 1.5: shorter prompts work better, under 75 tokens per block, use (word:weight) syntax
-- SDXL: handles longer prompts, supports more natural language alongside weighted syntax
-- Flux: natural language works well, less reliance on weighted syntax, very responsive to style descriptions
+**Capacidad de edición por herramienta** (detalles en `media.md`):
+- **GPT Image (ChatGPT o API):** sube la imagen y pide el cambio conversando; en la API, endpoint de edición o herramienta de imagen de Responses.
+- **Nano Banana (Gemini):** edición en varios turnos; hasta 14 referencias.
+- **Flux Kontext / FLUX.2:** nombra el papel de cada referencia («keep the face from image 1»).
+- **Midjourney:** `--oref [URL]` (Omni Reference, V7) para mantener un personaje u objeto, con `--ow` para su peso; `--sref [URL]` para el estilo. `--cref` ya no funciona en V7 ni V8.1.
+- **Stable Diffusion:** img2img, no txt2img; fuerza de eliminación de ruido 0,3–0,6 para conservar el original.
+- **Seedream:** nombra cada imagen por número y di qué no cambia.
 
+```
+Reference image: [adjunta / URL]
+Keep exactly the same: [todo lo que no debe cambiar]
+Change: [solo la edición, precisa]
+Amount of change: [sutil / moderado / notable]
+Style consistency: keep the exact style, lighting and mood of the reference
+```
+
+**Ejemplo:**
+```
+Keep exactly the same: face, hair, clothing, background, lighting.
+Change: rotate the head from facing left to facing straight at the camera.
+Amount of change: subtle; preserve every facial feature exactly.
+Style consistency: same photorealistic style and light direction as the reference.
+```
+
+---
+
+## Template I — ComfyUI
+
+*Para flujos de ComfyUI por nodos. Pregunta primero el modelo (checkpoint), porque la sintaxis, los límites y si existe el negativo cambian por familia.*
+
+**Pregunta si no lo dijo:** «¿Qué modelo tienes cargado? (SD 1.5, SDXL, SD 3.5, Flux u otro)».
+
+**Por familia:**
+- **SD 1.5:** prompts cortos, menos de 75 tokens por bloque, pesos `(word:1.3)`, bloque negativo útil, CFG ~7, 20–30 pasos.
+- **SDXL:** admite prompts más largos y lenguaje natural junto con pesos; negativo útil; CFG ~5–8 [sin verificar en fuente oficial].
+- **SD 3.5:** lenguaje natural; Large con guía ~4,5 y negativo vacío; Turbo con guía 1, 4 pasos y sin negativo.
+- **Flux:** lenguaje natural, sin negativo (la guía se ajusta con el nodo FluxGuidance); no escribas un bloque negativo que el flujo no usará.
+
+**Formato de entrega para SD 1.5 / SDXL:**
 ```
 POSITIVE PROMPT:
-[subject], [style], [mood], [lighting], [composition], [quality boosters: highly detailed, sharp focus, 8k]
+[subject], [style], [mood], [lighting], [composition], [detail cues]
 
 NEGATIVE PROMPT:
-[what to exclude: blurry, low quality, watermark, extra limbs, bad anatomy, distorted, oversaturated]
+[exclusiones: blurry, low quality, watermark, extra limbs, bad anatomy, distorted]
 
-CHECKPOINT: [model name]
-SAMPLER: Euler a (recommended starting point)
-CFG SCALE: 7 (increase for stricter prompt adherence)
-STEPS: 20-30
-RESOLUTION: [width x height — must be divisible by 64]
+CHECKPOINT: [modelo]
+SAMPLER: [p. ej. Euler a o DPM++ 2M]
+CFG: [según la familia]
+STEPS: [según la familia]
+RESOLUTION: [ancho x alto, múltiplos de 64]
+```
+
+**Formato de entrega para Flux / SD 3.5 Turbo:**
+```
+POSITIVE PROMPT:
+[descripción en lenguaje natural, 30–80 palabras, lo importante primero]
+
+CHECKPOINT: [modelo]
+GUIDANCE: [FluxGuidance o CFG según el modelo]
+STEPS: [según el modelo]
+RESOLUTION: [ancho x alto]
 ```

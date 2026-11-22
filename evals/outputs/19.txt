@@ -1,0 +1,45 @@
+```
+## Objetivo
+Agrega paginación con los parámetros de consulta `page` y `limit` al endpoint GET /api/products, para que deje de devolver todos los productos en una sola respuesta.
+
+## Contexto
+- Archivo del endpoint: src/routes/products.ts (Express, con Prisma como ORM).
+- Lee primero ese archivo para ver cómo consulta hoy los productos y qué filtros u orden ya aplica; consérvalos.
+
+## Estado final
+- GET /api/products devuelve solo la página pedida, con esta forma: `{ "data": [...], "page": n, "limit": n, "total": n, "totalPages": n }`.
+- Sin parámetros, usa page=1 y limit=[LÍMITE POR DEFECTO, p. ej. 20].
+- El orden es estable entre páginas: ordena por [CAMPO DE ORDEN, p. ej. id ascendente], para que no se repitan ni salten productos.
+
+## Alcance
+- Trabaja solo en: src/routes/products.ts y, si ya existe un archivo de pruebas de este endpoint, en ese archivo.
+- No toques: prisma/schema.prisma, migraciones, .env, lockfiles ni otras rutas.
+
+## Restricciones
+- `page` y `limit` deben ser enteros mayores o iguales a 1; si no lo son, responde 400 con un mensaje de error claro y el mismo formato de error que ya usa el proyecto.
+- Si `limit` supera [LÍMITE MÁXIMO, p. ej. 100], usa ese máximo en lugar de fallar.
+- Calcula la página con `skip` y `take` de Prisma, y obtén `total` con `count` aplicando los mismos filtros que la consulta de datos (puedes agruparlos con `prisma.$transaction`).
+- Sin dependencias nuevas.
+- Haz solo los cambios pedidos: sin funciones, abstracciones ni archivos extra, porque cada añadido es algo más que hay que revisar.
+
+## Criterios de aceptación
+- [ ] GET /api/products?page=2&limit=5 devuelve los productos 6 a 10 y `total` y `totalPages` correctos.
+- [ ] GET /api/products sin parámetros devuelve la página 1 con el límite por defecto.
+- [ ] page=0, limit=-1 o valores no numéricos devuelven 400.
+- [ ] Una página más allá del final devuelve `data: []` con 200.
+- [ ] Los filtros y el orden que ya existían siguen funcionando.
+- [ ] `npx tsc --noEmit` y [COMANDO DE PRUEBAS, p. ej. npm test] terminan sin errores.
+
+## Límites de acción
+- Adelante con inspección, ediciones y validación reversibles dentro del alcance.
+- Detente y pregunta antes de añadir dependencias, cambiar el esquema de la base de datos, borrar archivos o tocar algo fuera del alcance.
+
+## Evidencia de progreso
+Al terminar, indica los archivos cambiados y pega la salida de la compilación y de las pruebas. Respalda cada «terminado» con esa salida, no con una afirmación.
+```
+
+Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo, y confirma que rutas, carpetas y permisos coinciden con tu proyecto.
+
+🎯 Destino: Claude Code · 💡 Ancla al archivo exacto, fija la forma de la respuesta y las reglas de validación para que no haya que adivinarlas, y exige evidencia de compilación y pruebas antes de dar la tarea por terminada.
+
+Supuestos: respuesta con `data`, `page`, `limit`, `total` y `totalPages`; error 400 para valores inválidos y tope silencioso en `limit`. Rellena los campos entre corchetes con tus valores.

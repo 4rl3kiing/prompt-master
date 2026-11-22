@@ -1,133 +1,103 @@
 # Perfiles de modelos de lenguaje
 
-*Leer cuando la herramienta de destino sea un LLM (Claude, GPT, o-series, Grok, Gemini, Qwen, Ollama, Llama/Mistral, DeepSeek, MiniMax). Aplicar antes la Puerta de Recencia de SKILL.md.*
+*Lee este archivo cuando el destino sea un LLM. Aplica antes la Puerta de recencia de SKILL.md.*
+
+> **Última revisión: 2026-11-22.** Verificado contra la documentación oficial de cada proveedor en esa fecha. Lo marcado [sin verificar] no se pudo confirmar en una fuente oficial. Los nombres y versiones cambian cada pocos meses: si esta fecha tiene más de 60 días, confirma el modelo antes de citar un identificador.
+
+## Reglas comunes a todos los modelos actuales
+
+- **Tono:** instrucciones directas en positivo («escribe en párrafos») y con su razón. Anthropic advierte de forma explícita que el lenguaje agresivo («CRITICAL», «MUST») hace que los modelos actuales sobreactúen; el énfasis fuerte, solo para límites duros.
+- **Razonamiento:** los modelos actuales razonan por dentro y su profundidad se controla con un ajuste de esfuerzo o de nivel de pensamiento en la API o la interfaz, no con «piensa paso a paso». Nunca pidas la cadena de pensamiento; pide conclusión, evidencia y comprobaciones.
+- **Parámetros de muestreo:** GPT-6.2 y Gemini 4 ya no aceptan o ignoran `temperature`/`top_p`. No los recomiendes salvo que el perfil del modelo diga que sí.
+- **Ajustes fuera del prompt:** el modelo elegido, el esfuerzo y los parámetros de API van en la nota de preparación, nunca dentro del bloque copiable: el texto del prompt no cambia esos ajustes.
 
 ---
 
-> **Estado de verificación:** perfiles heredados de v1.8.2 y movidos sin cambios en v1.9.0. NO re-verificados contra documentación oficial de los proveedores. Antes de afirmar nombres de modelo, slugs o parámetros, aplicar la Puerta de Recencia de `SKILL.md`. Última revisión de estructura: 2026-11-08.
+## Claude (claude.ai, API, Claude Code)
+
+**Modelos vigentes** (API, todos con 1M de contexto, 128K de salida y pensamiento adaptativo):
+- `claude-fable-5-2` — el más capaz, para trabajo agéntico largo y difícil. Esfuerzo por defecto: alto.
+- `claude-opus-5-5` — punto de partida recomendado para código agéntico complejo y trabajo empresarial. Esfuerzo por defecto: medio.
+- `claude-sonnet-5-5` — velocidad con inteligencia de frontera. Esfuerzo por defecto: alto.
+- `claude-haiku-5-5` — rápido y económico. Esfuerzo por defecto: medio.
+
+Pregunta qué modelo usa solo si la diferencia cambia el prompt.
+
+**Cómo escribirle:**
+- Claro y directo: resultado deseado, restricciones y alcance explícitos; explica el porqué cuando guía su criterio.
+- Etiquetas XML descriptivas y consistentes (`<contexto>`, `<tarea>`, `<restricciones>`, `<formato_salida>`, `<ejemplos>`) en prompts complejos o con material mezclado.
+- Documentos largos arriba, envueltos en etiquetas con sus metadatos, y la pregunta al final: mejora notablemente la calidad.
+- Instrucciones generales mejor que pasos prescritos: estos modelos planifican bien solos.
+- Esfuerzo: es la palanca principal de coste y latencia; en Fable baja el esfuerzo en vez de pedirle que no piense. En Opus el esfuerzo no controla la longitud: pide concisión explícitamente si la quieres.
+- API: pensamiento `adaptive` con `output_config.effort`. `budget_tokens` devuelve error en Claude 4.7 y posteriores; no lo recomiendes.
+- Para tareas complejas o agénticas, plantilla K.
+
+**Por modelo:**
+- *Fable 5.2:* especificación completa orientada al resultado, límites de acción explícitos y verificación por intervalos en trabajos largos. Cada afirmación de progreso, respaldada por resultados reales de herramientas.
+- *Opus 5.5:* alcance estrecho («entrega lo pedido, sin funciones, refactorizaciones ni abstracciones extra»). Ya se autoverifica bien: evita «revisa todo dos veces» y subagentes verificadores en trabajo rutinario.
+- *Sonnet 5.5:* sigue las instrucciones al pie de la letra, sobre todo con esfuerzo bajo; di cuándo una regla aplica a cada elemento o sección.
+- *Haiku 5.5:* tareas acotadas y repetibles con contrato de salida explícito.
+
+**Modos de investigación:** «Research» en claude.ai hace búsquedas en varios pasos y entrega un informe con citas; el prompt debe decir la pregunta, el alcance, las fuentes preferidas o excluidas y el formato del informe.
 
 ---
 
-**Claude (claude.ai, Claude API, Claude 5.x / current Claude models)**
+## OpenAI (ChatGPT, Codex, API)
 
-Do not assume one universal Claude default. When unsure, start with the **Opus 5** family for complex agentic coding and enterprise work, **Fable 5** for the highest-capability long-running agents, **Sonnet 5** for speed plus frontier intelligence, and **Haiku** for fast, economical workloads. Ask which model only when the distinction changes the prompt. Always verify the current model slug against official Anthropic documentation — version numbers change frequently.
+Identifica la superficie (ChatGPT, Codex o API) y respeta el modelo que el usuario eligió.
 
-*Durable across current Claude models:*
-- Be clear and direct. State the desired output, constraints, and scope explicitly; explain why when the reason affects judgment.
-- Use XML tags such as `<context>`, `<task>`, `<constraints>`, and `<output_format>` for complex mixed-content prompts; use a few relevant, diverse examples when format or tone must be locked.
-- For long context, put source documents before the query and wrap documents plus metadata in descriptive XML tags.
-- Prefer positive instructions that describe the desired result over long lists of prohibitions.
-- Do not request hidden reasoning or reproduce thinking. Ask for a concise rationale, evidence, and verification results.
-- Current Claude 5 models use adaptive thinking and an effort control. Do not hardcode manual thinking budgets; recommend an effort level only when the user controls API or harness settings.
-- Use Template M for complex or agentic tasks.
+**Modelos vigentes** (1,05M de contexto, hasta 128K de salida):
+- `gpt-6.2-astra` — el más capaz: razonamiento exigente, investigación, código y documentos (desde 2026-11-17).
+- `gpt-6.2-sol` — insignia para código, uso de computadora y trabajo profesional; el predeterminado en Codex.
+- `gpt-6.1-terra` — equilibrado para el día a día.
+- `gpt-6-luna` — rápido y económico para tareas acotadas y de alto volumen.
+- La familia GPT-5.6 y GPT-6.1 Sol siguen disponibles pero ya no son las actuales; o3, o4-mini y o3-mini están retirados o en retiro (o3 se apaga el 2026-12-11). Si el usuario nombra uno de ellos, avisa en la nota y sugiere su reemplazo.
 
-*Fable 5.1 (and Fable 5):*
-- Fable 5.1 is optimized for the hardest long-horizon autonomous work. Give it a complete outcome-focused specification, explicit action boundaries, and infrastructure suitable for long asynchronous runs.
-- Ground every long-run progress claim in actual tool results. Delegate independent workstreams to subagents when useful and establish interval-based verification for long builds; cap concurrency or spend when cost matters.
+**Cómo escribirle (guía oficial de GPT-6.2):**
+- Resultado primero: di la meta y qué decisiones necesitan al usuario. Que asuma supuestos razonables y reversibles y siga; que pregunte solo ante cambios de alcance, bloqueos reales o acciones irreversibles.
+- Estos modelos ya son concisos: revisa si hace falta pedir brevedad.
+- Pide verificación antes de terminar y una respuesta final autosuficiente.
+- En código, describe las convenciones del proyecto (reutilizar lógica, cuándo añadir pruebas); en frontend, especifica imágenes y tipografía.
+- Plantilla L para tareas complejas; omite secciones irrelevantes.
 
-*Opus 5.5 (and Opus 5):*
-- Opus 5.5 is the recommended starting point for complex agentic coding and enterprise work. Keep scope tight: "Deliver what was asked. Do not add features, refactors, or abstractions beyond the task."
-- Opus 5.5 already self-verifies strongly. Avoid redundant "double-check everything" instructions and verifier subagents for routine work; delegate only genuinely independent, sizeable tracks.
+**Ajustes de API (en la nota, no en el prompt):**
+- `reasoning.effort`: `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, según el modelo. GPT-6.2 Astra y Sol no aceptan `none`. Empieza en `medium` para integraciones nuevas. `reasoning.mode: "pro"` existe para GPT-5.6 y GPT-6, solo si la calidad medida justifica el coste.
+- GPT-6.2: quita `temperature`, `top_p` y `top_logprobs`; usa la API Responses para herramientas; pon las instrucciones estables en un mensaje `developer` inicial para aprovechar la caché.
+- Controles de ChatGPT o Codex (Pro, Max…) son de la interfaz; no los traduzcas a parámetros de API.
 
-*Sonnet 5.5 (and Sonnet 5):*
-- Sonnet 5.5 follows instructions literally, especially at lower effort. State when a rule applies to every item or section.
-- Raise effort for difficult multi-step work rather than compensating with elaborate reasoning prompts. Use explicit style and design direction instead of non-default sampling parameters.
-
-*Claude 4.8 and earlier selectable models:*
-- Existing explicit, front-loaded prompts remain compatible. If the model is 4.7 or later, use adaptive thinking and effort rather than `budget_tokens`.
+**ChatGPT:** proyectos, GPTs personalizados e investigación profunda existen, pero sus límites actuales están [sin verificar]. Para instrucciones de GPTs o proyectos usa la plantilla M.
 
 ---
 
-**ChatGPT / OpenAI GPT models**
+## Grok (xAI)
 
-Identify the surface (ChatGPT, Codex, or API), preserve the selected model, and use the Model Recency Gate for availability and exact controls.
-- Route GPT-6 Luna (`gpt-6-luna`) to focused, high-volume tasks; GPT-6.1 Sol (`gpt-6.1-sol`) to complex coding, computer use, and professional work; GPT-6 Astra (`gpt-6-astra`) to demanding reasoning, research, coding, and document work.
-- Preserve GPT-5.6 choices: Sol (`gpt-5.6-sol`, alias `gpt-5.6`) for flagship capability, Terra (`gpt-5.6-terra`) for balanced everyday work, and Luna (`gpt-5.6-luna`) for fast, repeatable tasks. ChatGPT availability depends on the user's plan.
-- Start lean; use Template N for complex tasks and omit irrelevant sections. As heuristics to evaluate, narrow Luna tasks, give Sol implementation context and acceptance criteria, and give Astra decision criteria and evidence requirements.
-- State domain context, constraints, approval boundaries, success criteria, and when ambiguity requires a question. Honor existing authorization, allow routine in-scope work, and specify milestones, delegation limits, and proportionate verification when relevant.
-- For GPT-6 API tools, use Responses: Astra and GPT-6.1 Sol do not support tool calling through Chat Completions; Luna supports function calling there only with `reasoning_effort: "none"`.
-- Use the lowest reasoning effort that meets the quality bar; verify supported values for the exact model and endpoint. Do not transfer GPT-5.6-specific controls to newer models without verification.
-- Keep runtime settings outside the copyable prompt. For GPT-5.6, use higher effort, `reasoning.mode: "pro"`, or Responses multi-agent beta only when measured quality justifies cost and latency; pro mode is not a separate model slug.
-- Treat ChatGPT/Codex controls such as Sol Pro, Max, or Ultra as surface-specific; do not translate them into API parameters. Prompt text does not change the selected model or runtime settings.
-- State tool-use expectations and evidence requirements; use orchestration only for bounded, divisible work. Ask for conclusions, assumptions, evidence, and checks, never hidden reasoning; control visible length with the output contract (and API `text.verbosity`).
+- Vigentes: `grok-4.7` (el más reciente en la API) y `grok-4.6`, ambos con 500K de contexto. Esfuerzo `low`, `medium`, `high` (por defecto) y `xhigh`. El razonamiento no se puede desactivar.
+- Tarea orientada al resultado: Meta, Contexto/Entrada, Restricciones, Herramientas/Permisos y Hecho.
+- Para hechos actuales, exige Web Search o X Search y citas: sin búsqueda, el modelo no tiene conocimiento en tiempo real.
+- En bucles de agente largos: condiciones de parada, límites de aprobación, límite de reintentos y puntos de compactación.
+- Lo estable va primero para aprovechar la caché; en la nota, sugiere `prompt_cache_key` (Responses) o `x-grok-conv-id` (Chat Completions). Penalizaciones y `stop` dan error en modelos de razonamiento.
+- En grok.com o X el usuario no controla parámetros: pon solo requisitos de conducta en el prompt.
 
 ---
 
-**OpenAI reasoning models (o3, o4-mini, and successors)**
-- SHORT clean instructions ONLY — these models reason across thousands of internal tokens
-- NEVER add CoT, "think step by step", or reasoning scaffolding — it actively degrades output
-- Prefer zero-shot first — add few-shot only if strictly needed and tightly aligned
-- State what you want and what done looks like. Nothing more.
-- Keep instructions concise while preserving necessary context, constraints, examples, and verification. Do not impose an arbitrary word limit.
+## Gemini (Google)
+
+- Familia Gemini 4: Carbon (trabajo más difícil y de largo aliento), Neon (`gemini-4-neon`, desde 2026-11-18, entre Carbon e Hydrogen), Argon (`gemini-4-argon`, estable, razonamiento) e Hydrogen (rápido). Cuál es «el insignia» hoy está [sin verificar]: si importa, pregunta qué modelo usa. Todos con ~1M de contexto. También siguen Gemini 3.x Flash y Flash-Lite.
+- Nivel de pensamiento con `thinking_level`: Argon acepta `low`, `medium` (por defecto) y `high`, sin `minimal`; Neon admite también `xhigh`. No escribas pasos de razonamiento en el prompt: ajusta el nivel.
+- Gemini 4 y 3.6+ ignoran `temperature`, `top_p` y `top_k`.
+- Guía oficial: pocos ejemplos en casi todos los prompts para fijar el formato; delimitadores claros (XML o Markdown, uno solo); contexto primero y la pregunta al final, con un puente como «Con base en la información anterior…»; persona, restricciones y formato en la instrucción de sistema.
+- Responde escueto por defecto: pide más detalle si lo necesitas.
+- En agentes: planificación, manejo de errores, lecturas de bajo riesgo frente a escrituras de alto riesgo y cuándo pedir permiso.
+- Para citas o hechos: «Cita solo fuentes de las que estés seguro; si dudas, escribe [incierto]» y, con contexto dado, «Básate solo en el contexto proporcionado».
+- **Deep Research** (app de Gemini): permite editar el plan antes de empezar y añadir Gmail, Drive, archivos o cuadernos de NotebookLM; el prompt debe fijar pregunta, alcance y formato del informe. Los detalles actuales de NotebookLM están [sin verificar].
 
 ---
 
-**Grok / Grok 4.6 / xAI**
-- Use `grok-4.6` for current general chat, coding, agentic, and knowledge-work prompts. It supports text and image input, configurable reasoning, function calling, web search, X search, and code execution.
-- Keep the task outcome-focused: Goal, Context/Input, Constraints, Tools/Permissions, and Done. Grok 4.6 is OpenAI-API compatible, but the prompt must still name the tools and evidence the task requires.
-- Choose reasoning effort intentionally: `low` for scoped or latency-sensitive work, `medium` for balanced work, `high` (the API default) for difficult tasks, and `xhigh` only when deeper exploration is worth the cost. Grok 4.6 reasoning cannot be disabled. Do not ask for chain-of-thought.
-- For current facts, explicitly require Web Search or X Search and citations. Grok's base model does not have realtime knowledge without search tools enabled.
-- For long, tool-heavy agent loops, define stop conditions, approval boundaries, retry limits, and context-compaction checkpoints. Keep stable instructions at the front to preserve prompt-cache reuse.
-- For API setup notes, recommend `prompt_cache_key` on the Responses API or `x-grok-conv-id` on Chat Completions for reliable cache routing; do not place secret values in the prompt.
-- Consumer Grok and the xAI API expose different controls. If the user is in grok.com or X and cannot set model parameters, encode only behavioral requirements in the prompt rather than API settings.
+## Modelos abiertos y otros
 
----
-
-**Gemini / Google AI models (Gemini 4 Argon, Gemini 3.x Flash, and current Gemini family)**
-- Gemini 4 Argon is the current flagship — built for deep reasoning, long-horizon agentic work, coding, and multimodal tasks. 1M token context window. Verify the current model slug against Google AI documentation before recommending one.
-- Strong at long-context and multimodal — leverage its large context window for document-heavy prompts
-- Prone to hallucinated citations — always add "Cite only sources you are certain of. If uncertain, say [uncertain]."
-- Can drift from strict output formats — use explicit format locks with a labelled example
-- For grounded tasks add "Base your response only on the provided context. Do not extrapolate."
-- Gemini 4 Argon supports tunable thinking levels (low, medium, high) — do not hardcode reasoning steps, set thinking level instead
-
----
-
-**Qwen 2.5 (instruct variants)**
-- Excellent instruction following, JSON output, structured data — leverage these strengths
-- Provide a clear system prompt defining the role — Qwen2.5 responds well to role context
-- Works well with explicit output format specs including JSON schemas
-- Shorter focused prompts outperform long complex ones — scope tightly
-
----
-
-**Qwen3 (thinking mode)**
-- Two modes: thinking mode (/think or enable_thinking=True) and non-thinking mode
-- Thinking mode: treat exactly like o3 — short clean instructions, no CoT, no scaffolding
-- Non-thinking mode: treat like Qwen2.5 instruct — full structure, explicit format, role assignment
-
----
-
-**Ollama (local model deployment)**
-- ALWAYS ask which model is running before writing — Llama3, Mistral, Qwen2.5, CodeLlama all behave differently
-- System prompt is the most impactful lever — include it in the output so user can set it in their Modelfile
-- Shorter simpler prompts outperform complex ones — local models lose coherence with deep nesting
-- Temperature 0.1 for coding/deterministic tasks, 0.7-0.8 for creative tasks
-- For coding: CodeLlama or Qwen2.5-Coder, not general Llama
-
----
-
-**Llama / Mistral / open-weight LLMs**
-- Shorter prompts work better — these models lose coherence with deeply nested instructions
-- Simple flat structure — avoid heavy nesting or multi-level hierarchies
-- Be more explicit than you would with Claude or GPT — instruction following is weaker
-- Always include a role in the system prompt
-
----
-
-**DeepSeek-R1**
-- Reasoning-native like o3 — do NOT add CoT instructions
-- Short clean instructions only — state the goal and desired output format
-- Outputs reasoning in `<think>` tags by default — add "Output only the final answer, no reasoning." if needed
-
----
-
-**MiniMax (M3 / M2.7)**
-- OpenAI-compatible API — prompts that work with GPT models transfer directly
-- Strong at instruction following, structured output, and long-context synthesis — 1M context window on M2.7
-- M2.7-highspeed is optimized for speed — use for latency-sensitive tasks
-- Temperature must be between 0 and 1 (inclusive) — prompts that set temperature above 1 will fail
-- May output reasoning in `<think>` tags — add "Output only the final answer, no reasoning tags." if the user does not want visible thinking
-- Good at code generation, JSON output, and multi-step analysis — leverage these strengths
-- Responds well to explicit role assignment and structured prompts with clear output format specifications
-- For function calling: supports OpenAI-style tool definitions — include tool schemas directly
+- **DeepSeek:** vigentes `deepseek-v4-pro` (esfuerzo de pensamiento `low`, `high`, `max`) y `deepseek-flash` (V4.1-Flash). R1 ya no es actual. Instrucciones cortas con la meta y el formato; sin pedir razonamiento paso a paso. Si muestra pensamiento entre etiquetas `<think>` y no se quiere, añade «Entrega solo la respuesta final».
+- **Qwen:** el más reciente es Qwen4-Max (2026-11-16), por API; los Qwen4 abiertos más pequeños están anunciados [identificador sin verificar]. Buen seguimiento de instrucciones y JSON: rol claro en el sistema y esquemas de salida explícitos. En modo con pensamiento, trátalo como modelo de razonamiento (instrucciones cortas, sin andamiaje).
+- **Mistral:** vigentes Large 4 y Small 4; Codestral para código. Medium 3.5, Magistral y Devstral están en retiro.
+- **Meta:** su modelo actual, Muse Spark, es cerrado; no hay Llama nuevo confirmado. Para Llama 4 u otros abiertos locales: prompts más cortos, estructura plana, más explícitos que con Claude o GPT y rol en el sistema.
+- **MiniMax:** M3 (2026-06-01, 1M de contexto, multimodal) y M3.1 Flash (2026-10-19, más rápido); M2.7 es la generación anterior. API compatible con OpenAI: los prompts de GPT se transfieren. La temperatura debe estar entre 0 y 1. Puede mostrar etiquetas `<think>`: añade «Entrega solo la respuesta final, sin etiquetas de razonamiento» si no se quieren.
+- **Ollama (local):** pregunta siempre qué modelo corre, porque cada uno se comporta distinto. El prompt de sistema es la palanca principal: inclúyelo para que lo ponga en su Modelfile. Prompts cortos y planos. Temperatura 0,1 para código y 0,7–0,8 para creatividad, salvo que el modelo indique otra cosa.

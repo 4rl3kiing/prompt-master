@@ -2,366 +2,258 @@
 
 <br/>
 
-A Claude skill that writes the accurate prompts for any AI tool. Zero tokens or credits wasted. Full context and memory retention. No re-prompting your way to an answer you should have gotten on attempt one.
+Una skill de Claude que escribe prompts listos para pegar en cualquier herramienta de IA: modelos de chat, agentes de código, generadores de imagen, video, voz y música, automatizaciones y prompts permanentes (system prompts, GPTs, CLAUDE.md, AGENTS.md). El objetivo es que el prompt funcione a la primera, sin tener que corregirlo.
 
-**Works with:** Claude, ChatGPT, Codex, Grok, Gemini, o1/o3, MiniMax, Cursor, Claude Code, GitHub Copilot, Windsurf, Bolt, v0, Lovable, Devin, Perplexity, Midjourney, DALL-E, Stable Diffusion, ComfyUI, Sora, Runway, ElevenLabs, Zapier, Make, and any AI tool you throw at it.
+**Versión actual: 2.0.0** · Perfiles de herramientas revisados el 2026-11-22.
 
 ---
 
-## 🚀 Installation
+## 🚀 Instalación
 
-### RECOMMENDED - Claude.ai (browser)
+### Recomendado — Claude.ai (navegador)
 
-1. Download this repo as a ZIP
-2. Go to **claude.ai → Sidebar → Customize → Skills → Upload a Skill**
+1. Descarga este repositorio como ZIP.
+2. Ve a **claude.ai → barra lateral → Personalizar → Skills → Subir una skill**.
 
-
-### OR Clone directly into Claude Code skills directory (Not Suggested)
+### O clonar en la carpeta de skills de Claude Code
 
 ```bash
 mkdir -p ~/.claude/skills
 git clone https://github.com/4rl3kiing/prompt-master.git ~/.claude/skills/prompt-master
 ```
 
-## 🔥 The Problem This Solves
+---
 
-Every AI user wastes credits the same way:
+## 🔥 El problema que resuelve
 
-> Write vague prompt → get wrong output → re-prompt → get closer → re-prompt again → finally get what you wanted on attempt 4
+> Prompt vago → salida equivocada → corregir → algo mejor → corregir otra vez → por fin, al cuarto intento.
 
-That's 3 wasted API calls. Multiply by 50 prompts a day. That's real money and real time gone.
-
-### The key insight
-
-> "The best prompt is not the longest. It's the one where every word is load-bearing."
-
-Most "prompt generators" make prompts longer. This skill makes them sharper.
+Cada vuelta cuesta tiempo y créditos. Prompt Master no hace los prompts más largos, sino más precisos: cada frase debe cambiar el resultado.
 
 ---
 
-## 🎯 Usage
+## 🎯 Uso
 
-In Claude, you can invoke the skill naturally:
-
-```
-Write me a prompt for Cursor to refactor my auth module
-```
+Pídelo con naturalidad, aunque no digas «prompt»:
 
 ```
-I need a prompt for Claude Code to build a REST API — ask me what you need to know
+Qué le escribo a Cursor para que refactorice mi módulo de auth
+```
+```
+Necesito un prompt para Claude Code que agregue paginación a /api/products
+```
+```
+Arregla este prompt que uso con ChatGPT: [pega el prompt]
+```
+```
+Prompt de Midjourney: ciudad cyberpunk de noche
+```
+```
+Escríbeme las instrucciones para un GPT personalizado de atención al cliente
+```
+```
+Hazme el CLAUDE.md para mi repo de Rust
+```
+```
+Hazlo más corto (después de una entrega)
 ```
 
-```
-Here's a bad prompt I wrote for GPT-4o, fix it: [paste prompt]
-```
-
-```
-Generate a Midjourney prompt for a cyberpunk city at night
-```
-
-```
-I have a reference image — help me write a prompt to edit just the head angle
-```
-
-```
-Break this prompt down and adapt it for Stable Diffusion
-```
-
-Or explicitly invoke it:
-
-```
-/prompt-master
-
-I want to ask Claude Code to build a todo app with React and Supabase
-```
+O invócala directamente con `/prompt-master`.
 
 ---
 
-## How It Works
+## Cómo funciona
 
-Prompt Master runs a structured pipeline on every request:
+1. **Detecta la herramienta destino** y carga solo su perfil. Si la tarea es clara pero no dices herramienta, entrega un prompt universal.
+2. **Extrae 9 dimensiones:** tarea, herramienta, formato de salida, restricciones, entrada, contexto, público, criterio de éxito y ejemplos.
+3. **Pregunta o supone:** pregunta (máximo 3) solo cuando un supuesto equivocado arruinaría el prompt; lo demás lo deja en `[CAMPOS]` y lo declara en una línea de supuestos.
+4. **Elige una de 13 plantillas** sin mostrarte su nombre.
+5. **Revisa 40 patrones de fallo** y los corrige en silencio.
+6. **Verifica la vigencia:** cada perfil tiene fecha de revisión; si tiene más de 60 días o pides «el último modelo», confirma en la documentación oficial.
+7. **Recorta** lo que no cambia el resultado y hace una **prueba de lectura** (una sola interpretación, campos explicados, terminado comprobable).
+8. **Entrega** un bloque listo para pegar y una línea `🎯 Destino · 💡 qué optimizó`. Si el prompt va a producción, ofrece 3 entradas de prueba.
 
-1. **Detects the target tool** — figures out which AI system the prompt is for and routes silently to the right approach
-2. **Extracts 9 dimensions of intent** — task, input, output, constraints, context, audience, memory, success criteria, examples
-3. **Asks targeted clarifying questions** — max 3 questions if critical info is missing, never more
-4. **Routes to the right framework** — picks and applies the correct prompt architecture automatically, never shown to the user
-5. **Applies safe techniques only** — role assignment, few-shot examples, XML structure, grounding anchors, memory block as needed
-6. **Checks model recency** — verifies exact models and controls against official provider docs when the request depends on "latest"
-7. **Runs a token efficiency audit** — strips every word that doesn't change the output
-8. **Delivers the prompt** — one clean copyable block with a one-line strategy note
-
----
-## Full Example #1: Generating Prompts for Images
-
-### User Input
-```
-Write me a midjourney prompt for a realistic samurai standing in the rain at night
-```
-
-### Generated Prompt
-```
-lone samurai standing in heavy rain at night, traditional armor, 
-neon reflections on wet cobblestone street, cinematic lighting, 
-dramatic shadows, fog, ultra detailed, photorealistic, 
-shallow depth of field --ar 16:9 --v 6 --style raw
---no blurry, low quality, watermark, cartoon, anime, extra limbs
-```
-**🎯 Target:** Midjourney · **💡 Strategy:** Comma-separated descriptors over prose, lighting and mood anchored early, aspect ratio and version locked, negative prompt prevents style drift.
-
----
-## Full Example #2: Generating Prompts for Coding
-
-### User Input
-```
-Build a claude code prompt for a landing page for a business 
-dashboard that looks and feels exactly like notion - smooth animations, 
-clean ui
-```
-
-
-### Generated Prompt
-```
-Objective:
-Build a fully detailed, production-quality static landing page for a 
-business dashboard product. Design must match Notion's exact aesthetic — 
-clean, minimal, typographic, with smooth animations throughout.
-
-Stack:
-Single HTML file with embedded CSS and vanilla JS. No frameworks. 
-No external dependencies except Google Fonts (Inter).
-
-Design Spec — match these exactly:
-- Background: #ffffff
-- Primary text: #1a1a1a
-- Secondary text: #6b7280
-- Border color: #e5e7eb
-- Accent: #000000
-- Font: Inter, weights 400 / 500 / 600 / 700
-- Base spacing unit: 8px
-- Border radius: 6px on cards, 4px on buttons
-- Box shadows: 0 1px 3px rgba(0,0,0,0.08) only — no dramatic shadows
-- Buttons: black fill, white text, no border radius above 6px
-
-Sections to build in order:
-1. Navbar — logo left, nav links center, "Get started free" CTA right. 
-   Sticky on scroll, adds subtle border-bottom on scroll with JS.
-2. Hero — large left-aligned heading (max 3 lines), subtext, two CTAs 
-   (primary black + secondary outlined), hero screenshot mockup 
-   placeholder (gray rounded card, 16:9 ratio).
-3. Logos bar — "Trusted by teams at..." with 5 placeholder company names 
-   in muted gray, centered.
-4. Features — 3-column grid. Each card: icon (use emoji), bold title, 
-   2-line description. Hover state: border darkens to #d1d5db, 
-   translateY(-2px), transition 200ms ease.
-5. How it works — alternating left/right layout, 3 steps. Number badge, 
-   heading, description, placeholder screenshot card.
-6. Pricing — 2 tiers side by side. Free tier: outlined card. Pro tier: 
-   black background, white text, "Most popular" badge. List 4 features 
-   each with checkmarks.
-7. CTA banner — full-width dark section, centered heading, subtext, 
-   single CTA button.
-8. Footer — 4-column links, copyright line, minimal.
-
-Animations — implement all of these:
-- Fade-in + translateY(20px) to translateY(0) on scroll for every section, 
-  using IntersectionObserver. Threshold 0.15. Duration 500ms ease-out.
-- Staggered animation on feature cards: 100ms delay between each card.
-- Navbar CTA button: background transitions from black to #333 on hover, 
-  200ms ease.
-- Hero CTA primary: same hover transition. Secondary: background goes from 
-  transparent to #f3f4f6 on hover.
-- Smooth scroll on all anchor links.
-- Navbar border-bottom fades in on scroll past 60px using JS scroll event.
-
-Constraints:
-- Single file only — all CSS and JS embedded, no external files
-- No dependencies except Google Fonts via CDN link tag
-- All placeholder images replaced with styled gray div elements
-- Must be pixel-perfect at 375px mobile and 1440px desktop
-- No CSS frameworks, no utility classes from external sources
-
-Done When:
-- All 8 sections render correctly at both breakpoints
-- All animations trigger on scroll without layout shift
-- Navbar sticks and border appears on scroll
-- Hover states work on all interactive elements
-- Opens in browser with zero console errors
-```
-**🎯 Target:** Claude Code · **💡 Strategy:** Every vague Notion aesthetic cue translated into exact hex values and pixel specs — Claude Code cannot guess wrong. Animations defined with exact timing, method, and trigger so there is no interpretation needed.
+Después de entregar, el **modo ajuste** cambia solo lo que pidas («más corto», «no funcionó, me dio X») y te dice qué cambió.
 
 ---
 
-## 🤝 Works With Any AI Tool
+## Idioma
 
-Prompt Master includes specific profiles for 20+ tools. For anything not on the list, it uses a **Universal Fingerprint**: 4 questions that let it write a quality prompt for any AI system it has never seen before.
-
-<details>
-<summary><h3> Click to view all 30+ tool profiles </h3></summary>
-
-| Tool | Category | What Prompt Master Fixes |
-|------|----------|--------------------------|
-| **Claude 5 / current Claude** | Reasoning and agentic LLM | Model-aware effort, scope, XML structure, and delegation control |
-| **ChatGPT / OpenAI GPT models** | Reasoning and agentic LLM | GPT-6 Luna, GPT-6.1 Sol, GPT-6 Astra, and GPT-5.6 compatibility; lean contracts and verified controls |
-| **Codex** | Coding agent | File scope, approval boundaries, verification, bounded subagents |
-| **Grok 4.6** | Reasoning and agentic LLM | Search grounding, reasoning effort, tools, caching, and stop conditions |
-| **Gemini 2.x** | Reasoning LLM | Grounding anchors, citation rules, format locks |
-| **o3 / o4-mini** | Thinking LLM | Short clean instructions only — never adds CoT (they think internally) |
-| **Ollama** | Local LLM | Asks which model is loaded, includes system prompt for Modelfile |
-| **Qwen 2.5 / Qwen3** | Open-weight LLM | Chat template format, thinking vs non-thinking mode detection |
-| **Local models (Llama, Mistral)** | Open-weight LLM | Shorter prompts, simpler structure, no complex nesting |
-| **DeepSeek-R1** | Reasoning LLM | Short clean instructions, strips CoT, suppresses thinking output if needed |
-| **MiniMax (M3 / M2.7)** | Reasoning LLM | Temperature clamping, thinking tag control, structured output optimization |
-| **Claude Code** | Agentic AI | Stop conditions, file scope, checkpoint output |
-| **Cursor / Windsurf** | IDE AI | File path, function name, do-not-touch list, sequential prompt guidance |
-| **Cline (formerly Claude Dev)** | Agentic IDE | File scope, approval gates, stop conditions, task breakdown |
-| **GitHub Copilot** | Autocomplete AI | Exact function contract as docstring |
-| **Antigravity** | Agentic IDE | Task-based prompting, Artifact verification, autonomy level |
-| **Bolt / v0 / Lovable** | Full-stack generator | Stack spec, version, what NOT to scaffold |
-| **Figma Make** | Full-stack generator | Component name references, frame-to-code scope |
-| **Google Stitch** | Full-stack generator | Interface goal over implementation, Material Design 3 spec |
-| **Devin / SWE-agent** | Autonomous agent | Starting state, target state, stop conditions |
-| **Manus** | Autonomous agent | Task outcome focus, permission scope, memory anchors |
-| **OpenAI Computer Use** | Computer-use agent | Screen state, allowed apps, stop before irreversible actions |
-| **Perplexity Computer** | Computer-use agent | Artifact-first prompting, scoped permissions, verification steps |
-| **OpenClaw** | Computer-use agent | Conversational precision, persistent memory, security constraints |
-| **Perplexity / SearchGPT** | Search AI | Mode spec: search vs analyze vs compare |
-| **Midjourney** | Image AI | Comma-separated descriptors, parameters, negative prompts |
-| **DALL-E 3** | Image AI | Prose description, text exclusion — edit vs generate detection |
-| **Stable Diffusion** | Image AI | Weight syntax `(word:1.3)`, CFG guidance, mandatory negative prompt |
-| **SeeDream** | Image AI | Art style first, mood and atmosphere descriptors, negative prompt |
-| **ComfyUI** | Image AI | Positive/negative node split, checkpoint-specific syntax |
-| **Meshy / Tripo / Rodin** | 3D AI | Style + export format + polygon budget + rig requirements |
-| **BlenderGPT** | 3D AI | Python script output, Blender version, scene context |
-| **Unity AI** | 3D / Game AI | Game genre, platform target, mechanic description over code |
-| **Sora / Runway** | Video AI | Camera movement, duration, cut style |
-| **LTX / Dream Machine / Kling** | Video AI | Cinematic language, motion intensity, style reference |
-| **ElevenLabs** | Voice AI | Emotion, pacing, emphasis, speech rate |
-| **Zapier / Make / n8n** | Workflow automation | Trigger app + event, action app + field mapping |
-
-</details>
+La respuesta y el prompt salen en tu idioma, con las etiquetas del prompt también en tu idioma. Excepción: los prompts de imagen, video, 3D y música van en inglés, porque esos modelos lo siguen mejor.
 
 ---
 
-## 📐 14 Prompt Templates (Auto-Selected)
+## Ejemplo: imagen
 
-Prompt Master picks the right architecture for every task automatically and routes silently — you never see the framework name, just the prompt.
+**Entrada**
+```
+Prompt de midjourney de un samurái realista bajo la lluvia de noche
+```
 
-<details>
-<summary><h3> Click to view all 14 templates</h3></summary>
-
-| Template | Best For |
-|----------|----------|
-| **RTF** (Role, Task, Format) | Fast one-shot tasks |
-| **CO-STAR** (Context, Objective, Style, Tone, Audience, Response) | Professional documents, reports, business writing |
-| **RISEN** (Role, Instructions, Steps, End Goal, Narrowing) | Complex multi-step projects |
-| **CRISPE** (Capacity, Role, Insight, Statement, Personality, Experiment) | Creative work, brand voice, iterative content |
-| **Auditable Reasoning** | Checkable math, logic, debugging, and analysis without hidden reasoning requests |
-| **Few-Shot** | Consistent structured output, pattern replication |
-| **File-Scope Template** | Cursor, Windsurf, Copilot — any code editing AI |
-| **ReAct + Stop Conditions** | Claude Code, Devin, AutoGPT — any autonomous agent |
-| **Visual Descriptor** | Midjourney, DALL-E, Stable Diffusion, Sora — generation |
-| **Reference Image Editing** | Editing an existing image — detects edit vs generate automatically |
-| **ComfyUI** | Node-based image workflows — positive/negative split per checkpoint |
-| **Prompt Decompiler** | Breaking down, adapting, simplifying, or splitting existing prompts |
-| **Current Claude Task Brief** | Complex, multi-step, or agentic tasks on current Claude models |
-| **OpenAI Task Brief** | Complex tasks in ChatGPT, Codex, or the API; GPT-6 guidance alongside GPT-5.6 compatibility |
-
-</details>
+**Prompt generado**
+```
+lone samurai standing in heavy rain at night, traditional armor,
+neon reflections on wet cobblestone street, cinematic lighting,
+dramatic shadows, fog, photorealistic, shallow depth of field
+--ar 16:9 --raw --no blurry, watermark, cartoon, extra limbs
+```
+**🎯 Destino:** Midjourney · **💡** Descriptores separados por comas con luz y ambiente al principio, proporción fijada y exclusiones con `--no`; en inglés porque Midjourney lo sigue mejor.
 
 ---
 
-## 🛡️ 5 Safe Techniques, Applied When Needed
+## Ejemplo: código
 
-Prompt Master only uses techniques with reliable, bounded effects. Methods known to produce hallucinations or unpredictable output (Tree of Thought, Graph of Thought, Universal Self-Consistency, prompt chaining) are explicitly excluded.
+**Entrada**
+```
+Prompt para Claude Code: agregar paginación (page, limit) al endpoint
+GET /api/products en src/routes/products.ts, con Express y Prisma
+```
 
-| Technique | What It Does |
-|-----------|-------------|
-| **Role Assignment** | Assigns a specific expert identity to calibrate depth and vocabulary |
-| **Few-Shot Examples** | Adds 2-5 examples when format consistency matters more than instructions |
-| **XML Structural Tags** | Wraps sections in XML for Claude-based tools that parse it reliably |
-| **Grounding Anchors** | Adds anti-hallucination rules for factual and citation tasks |
-| **Auditable Reasoning** | Requests conclusions, assumptions, evidence, and verification without hidden reasoning |
+**Prompt generado**
+```
+## Objetivo
+Agregar paginación con los parámetros `page` y `limit` a GET /api/products.
+
+## Contexto
+API en Express con Prisma. El endpoint está en src/routes/products.ts y hoy devuelve todos los productos.
+
+## Estado final
+- GET /api/products?page=2&limit=20 devuelve los productos 21–40.
+- La respuesta incluye `data`, `page`, `limit` y `total`.
+- Sin parámetros, usa page=1 y limit=20; limit máximo 100.
+
+## Alcance
+- Trabaja solo en: src/routes/products.ts y sus pruebas.
+- No toques: el esquema de Prisma, otros endpoints, .env ni la configuración.
+
+## Criterios de aceptación
+- [ ] Valores no numéricos o negativos devuelven 400 con un mensaje claro.
+- [ ] Las pruebas existentes siguen pasando y hay pruebas nuevas para la paginación.
+
+## Límites de acción
+Adelante con ediciones y pruebas dentro del alcance. Detente y pregunta antes de cambiar el esquema de la base de datos o añadir dependencias.
+```
+**🎯 Destino:** Claude Code · **💡** Estado final verificable y alcance cerrado a un archivo, para que no toque el esquema ni otros endpoints.
+
+> Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo.
 
 ---
 
-## 🚫 37 Credit-Killing Patterns Detected
+## 🤝 Herramientas con perfil propio
 
-The full before/after table lives in one place: [references/patterns.md](references/patterns.md). Summary:
+| Categoría | Herramientas |
+|-----------|--------------|
+| Modelos de chat | Claude (Fable, Opus, Sonnet, Haiku), OpenAI GPT-6.x, Grok, Gemini 4, DeepSeek, Qwen, Mistral, MiniMax, modelos locales con Ollama, modos de investigación profunda |
+| Agentes de código | Claude Code, Codex, Cursor, Devin Desktop (antes Windsurf), Devin, Cline, GitHub Copilot, Google Antigravity |
+| Generadores de apps | Bolt, v0, Lovable, Figma Make, Google Stitch |
+| Investigación y navegador | Perplexity, Manus, agentes de navegador y uso de computadora |
+| Imagen | Midjourney, GPT Image, Nano Banana, Flux, Stable Diffusion, Ideogram, Seedream, ComfyUI |
+| Video | Veo, Runway, Kling, Luma, LTX, Sora (en retiro), video de Midjourney |
+| 3D | Meshy, Tripo, Rodin, Unity AI Assistant, Blender |
+| Voz y música | ElevenLabs, Suno, Udio |
+| Automatización | Zapier, Make, n8n |
+| Prompts permanentes | System prompts de API, GPTs, Proyectos, Gems, CLAUDE.md, AGENTS.md, reglas de Cursor, Devin y Copilot |
 
-| Category | # | Examples |
-|----------|---|----------|
-| Task | 1–7 | vague verb, unrelated tasks in one prompt, no success criteria, over-permissive agent |
-| Context | 8–13 | assumed prior knowledge, hallucination invite, undefined audience, no prior failures |
-| Format | 14–19 | missing output format, implicit length, vague aesthetic adjectives, no negative prompts |
-| Scope | 20–25 | no scope boundary, no file path for IDE AI, wrong template for tool, pasting the whole codebase |
-| Reasoning | 26–30 | no audit contract, requesting hidden reasoning, expecting inter-session memory |
-| Agentic | 31–37 | no starting/target state, silent agent, unlocked filesystem, no human review trigger, context rot |
+Para cualquier herramienta sin perfil, usa la categoría más cercana y te lo dice.
 
 ---
 
-## 🧠 Memory Block System
+## 📐 13 plantillas (selección automática)
 
-When your conversation has history, Prompt Master pulls out prior decisions and prepends a Memory Block so the AI never contradicts earlier work:
+| Plantilla | Para |
+|-----------|------|
+| A — Directa | Tareas simples de un paso |
+| B — Brief de escritura | Documentos, negocio, marketing, creatividad |
+| C — Razonamiento auditable | Lógica, matemáticas, análisis, depuración |
+| D — Ejemplos | Formato consistente |
+| E — Alcance de archivo | Cursor, Copilot y edición de código acotada |
+| F — Agente autónomo | Devin, Manus, agentes de navegador |
+| G — Descriptor visual | Generación de imagen y video |
+| H — Edición con referencia | Modificar una imagen existente |
+| I — ComfyUI | Flujos por nodos, según la familia del modelo |
+| J — Decompilador | Desglosar, adaptar, simplificar o dividir prompts |
+| K — Brief para Claude | Tareas complejas o agénticas en Claude y Claude Code |
+| L — Brief para OpenAI | Tareas complejas en ChatGPT, Codex o la API |
+| M — Prompt permanente | System prompts, GPTs, Proyectos, CLAUDE.md, AGENTS.md, reglas |
+
+---
+
+## 🛡️ Técnicas seguras
+
+Solo usa técnicas con efecto fiable: rol (cuando cambia el resultado), ejemplos, etiquetas XML, anclas contra la invención y razonamiento auditable. Excluye las que aumentan la invención de datos en un solo prompt (árbol o grafo de pensamiento, autoconsistencia simulada, cadenas largas). Nunca pide la cadena de pensamiento oculta.
+
+---
+
+## 🚫 40 patrones de fallo
+
+La tabla completa está en [references/patterns.md](references/patterns.md).
+
+| Categoría | # | Ejemplos |
+|-----------|---|----------|
+| Tarea | 1–7 | verbo vago, tareas sin relación, sin criterio de éxito |
+| Contexto | 8–13 | conocimiento previo supuesto, invitación a inventar, público indefinido |
+| Formato | 14–19 | sin formato de salida, extensión implícita, adjetivos vagos |
+| Alcance | 20–25 | sin límites, IA de IDE sin ruta, todo el código pegado |
+| Razonamiento | 26–30 | sin contrato de auditoría, pedir razonamiento oculto |
+| Agentes | 31–37 | sin estado inicial o final, sin revisión humana, contexto podrido |
+| Tono y vigencia | 38–40 | énfasis en mayúsculas, versiones obsoletas, tarea puntual en un prompt permanente |
+
+---
+
+## 🧠 Bloque de memoria
+
+Si la conversación tiene historial, antepone las decisiones previas para que la otra IA no las contradiga:
 
 ```
-## Context (carry forward)
+## Contexto previo
 - Stack: React 18 + TypeScript + Supabase
-- Auth uses JWT stored in httpOnly cookies, not localStorage
-- Component naming convention: PascalCase, no default exports
-- Design system: Tailwind only, no custom CSS files
-- Architecture: no Redux, context API only
+- La autenticación usa JWT en cookies httpOnly, no localStorage
+- Componentes en PascalCase, sin exportaciones por defecto
+- Solo Tailwind, sin archivos CSS propios
 ```
-
-This is the single biggest fix for long sessions. Most wasted re-prompts come from the AI forgetting what you already decided.
 
 ---
 
-## 🗂️ Repository Structure
+## 🗂️ Estructura del repositorio
 
 ```
 prompt-master/
-├── SKILL.md                  # Core: rules, language, intent extraction, routing table, diagnostics, verification
-├── CHANGELOG.md              # Version history
+├── SKILL.md                  # Núcleo: reglas, idioma, flujo, enrutamiento, diagnóstico, verificación
+├── CHANGELOG.md              # Historial de versiones
 ├── references/
-│   ├── models.md             # Language-model profiles (Claude, GPT, Grok, Gemini, open-weight…)
-│   ├── agents.md             # Coding agents, IDEs, generators, computer-use agents
-│   ├── media.md              # Image, 3D, video, voice, workflow automation
-│   ├── templates.md          # Index of templates A–N
-│   ├── templates/            # writing (A–F), code-agents (G–H), visual (I–K), decompiler (L), task-briefs (M–N)
-│   └── patterns.md           # 37 credit-killing patterns (single source)
+│   ├── models.md             # Modelos de lenguaje
+│   ├── agents.md             # Agentes de código, IDEs, generadores, navegador
+│   ├── media.md              # Imagen, 3D, video, voz, música, automatización
+│   ├── templates.md          # Índice de plantillas A–M
+│   ├── templates/            # writing (A–D), code-agents (E–F), visual (G–I), decompiler (J), task-briefs (K–L), persistent (M)
+│   └── patterns.md           # 40 patrones de fallo
 ├── evals/
-│   ├── cases.md              # Human-readable behavior checks
-│   └── cases.json            # Machine-checkable assertions (see scripts/run_evals.py)
+│   ├── cases.md              # Casos de comportamiento legibles
+│   ├── cases.json            # Comprobaciones automáticas
+│   ├── benchmark.md          # Comparación v2.0.0 frente a v1.10.1
+│   └── outputs/              # Salidas de referencia de la versión actual
 ├── scripts/
-│   ├── check.sh              # Consistency check (versions, links, counts, structure)
-│   └── run_evals.py          # Validates saved outputs against evals/cases.json
-└── .github/workflows/check.yml   # Runs check.sh on every push and pull request
+│   ├── check.sh              # Consistencia: versiones, enlaces, conteos, tono, fechas de revisión
+│   └── run_evals.py          # Comprueba las salidas contra evals/cases.json
+└── .github/workflows/check.yml   # Ejecuta check.sh en cada push y pull request
 ```
 
-Only `SKILL.md` loads on activation. Profile files load on demand, one per request, which keeps the context small and every response faster and cheaper. Run `bash scripts/check.sh` after any edit; CI runs it on every pull request.
+Al activarse solo se carga `SKILL.md`; los perfiles y plantillas se leen bajo demanda, uno por petición. Ejecuta `bash scripts/check.sh` después de cada cambio.
 
 ---
 
-## ℹ️ Version History
+## ℹ️ Historial
 
-See [CHANGELOG.md](CHANGELOG.md). Current version: **1.10.1**.
+Ver [CHANGELOG.md](CHANGELOG.md). Versión actual: **2.0.0**.
 
----
+## 📄 Licencia
 
-## 📄 License
+MIT: ver [LICENSE](LICENSE).
 
-MIT: See [LICENSE](LICENSE) for details.
+## 🙏 Créditos
 
----
+Fork de [nidhinjs/prompt-master](https://github.com/nidhinjs/prompt-master) de Nidhin Joseph Nelson (MIT). El aviso de copyright original se conserva en [LICENSE](LICENSE).
 
-## 🙏 Credits
-
-Fork of [nidhinjs/prompt-master](https://github.com/nidhinjs/prompt-master) by Nidhin Joseph Nelson (MIT). Original copyright notice preserved in [LICENSE](LICENSE).
-
----
-
-## ⭐ Upstream Star History
+## ⭐ Historial de estrellas del original
 
 [![Star History Chart](https://star-history.dera.page/svg?repos=nidhinjs/prompt-master&type=Date)](https://star-history.dera.page/#nidhinjs/prompt-master&Date)
-
----

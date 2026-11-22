@@ -1,82 +1,92 @@
-# Credit-Killing Patterns Reference
+# Catálogo de patrones que desperdician créditos
 
-37 patterns that waste tokens and cause re-prompts. Read this file when the user pastes a bad prompt and asks you to fix it, or when diagnosing why a prompt is underperforming.
-
----
-
-## Task Patterns
-
-| # | Pattern | Bad Example | Fixed |
-|---|---------|------------|-------|
-| 1 | **Vague task verb** | "help me with my code" | "Refactor `getUserData()` to use async/await and handle null returns" |
-| 2 | **Unrelated tasks in one prompt** | "fix login and write a sales email" | Split unrelated outcomes; combine related work with shared acceptance criteria |
-| 3 | **No success criteria** | "make it better" | "Done when the function passes existing unit tests and handles null input without throwing" |
-| 4 | **Over-permissive agent** | "do whatever it takes" | Explicit allowed actions list + explicit forbidden actions list |
-| 5 | **Emotional task description** | "it's totally broken, fix everything" | "Throws uncaught TypeError on line 43 when `user` is null" |
-| 6 | **Build-the-whole-thing** | "build my entire app" | Break into Prompt 1 (scaffold), Prompt 2 (core feature), Prompt 3 (polish) |
-| 7 | **Implicit reference** | "now add the other thing we discussed" | Always restate the full task — never reference "the thing we discussed" |
+40 patrones que gastan tokens y obligan a repetir el prompt. Lee este archivo cuando el usuario pegue un prompt malo para arreglarlo o cuando diagnostiques por qué un prompt rinde mal.
 
 ---
 
-## Context Patterns
+## Tarea
 
-| # | Pattern | Bad Example | Fixed |
-|---|---------|------------|-------|
-| 8 | **Assumed prior knowledge** | "continue where we left off" | Include Memory Block with all prior decisions |
-| 9 | **No project context** | "write a cover letter" | "PM role at B2B fintech, 2yr SWE experience transitioning to product, shipped 3 features as tech lead" |
-| 10 | **Forgotten stack** | New prompt contradicts prior tech choice | Always include Memory Block with established stack |
-| 11 | **Hallucination invite** | "what do experts say about X?" | "Cite only sources you are certain of. If uncertain, say so explicitly rather than guessing." |
-| 12 | **Undefined audience** | "write something for users" | "Non-technical B2B buyers, no coding knowledge, decision-maker level" |
-| 13 | **No mention of prior failures** | (blank) | "I already tried X and it didn't work because Y. Do not suggest X." |
-
----
-
-## Format Patterns
-
-| # | Pattern | Bad Example | Fixed |
-|---|---------|------------|-------|
-| 14 | **Missing output format** | "explain this concept" | "3 bullet points, each under 20 words, with a one-sentence summary at top" |
-| 15 | **Implicit length** | "write a summary" | "Write a summary in exactly 3 sentences" |
-| 16 | **Missing domain perspective** | Specialized task without domain context | Add an expert role only when it changes the result |
-| 17 | **Vague aesthetic adjectives** | "make it look professional" | "Monochrome palette, 16px base font, 24px line height, no decorative elements" |
-| 18 | **No negative prompts for image AI** | "a portrait of a woman" | Add: "no watermark, no blur, no extra fingers, no distortion, no text overlay" |
-| 19 | **Prose prompt for Midjourney** | Full descriptive sentence | "subject, style, mood, lighting, composition, --ar 16:9 --v 6" |
+| # | Patrón | Ejemplo malo | Corrección |
+|---|--------|--------------|------------|
+| 1 | **Verbo vago** | «ayúdame con mi código» | «Refactoriza `getUserData()` para usar async/await y manejar retornos nulos» |
+| 2 | **Tareas sin relación juntas** | «arregla el login y escribe un correo de ventas» | Separa resultados sin relación; une trabajo relacionado con criterios de aceptación comunes |
+| 3 | **Sin criterio de éxito** | «mejóralo» | «Hecho cuando la función pasa las pruebas existentes y acepta entrada nula sin lanzar error» |
+| 4 | **Agente sin límites** | «haz lo que haga falta» | Lista explícita de acciones permitidas y prohibidas |
+| 5 | **Descripción emocional** | «está todo roto, arréglalo todo» | «Lanza TypeError no capturado en la línea 43 cuando `user` es null» |
+| 6 | **Construir todo de golpe** | «hazme la app entera» | Prompt 1 (estructura), Prompt 2 (función principal), Prompt 3 (pulido) |
+| 7 | **Referencia implícita** | «ahora añade lo otro que hablamos» | Reescribe la tarea completa; nunca «lo que hablamos» |
 
 ---
 
-## Scope Patterns
+## Contexto
 
-| # | Pattern | Bad Example | Fixed |
-|---|---------|------------|-------|
-| 20 | **No scope boundary** | "fix my app" | "Fix only the login form validation in `src/auth.js`. Touch nothing else." |
-| 21 | **No stack constraints** | "build a React component" | "React 18, TypeScript strict, no external libraries, Tailwind only" |
-| 22 | **No stop condition for agents** | "build the whole feature" | Explicit stop conditions + meaningful milestones and verification evidence |
-| 23 | **No file path for IDE AI** | "update the login function" | "Update `handleLogin()` in `src/pages/Login.tsx` only" |
-| 24 | **Wrong template for tool** | GPT-style prose prompt used in Cursor | Adapt to File-Scope Template (Template G) |
-| 25 | **Pasting entire codebase** | Full repo context every prompt | Scope to only the relevant function and file |
-
----
-
-## Reasoning Patterns
-
-| # | Pattern | Bad Example | Fixed |
-|---|---------|------------|-------|
-| 26 | **No audit contract for logic task** | "which approach is better?" | Request the recommendation, assumptions, decision criteria, evidence, and verification checks |
-| 27 | **Requesting hidden reasoning** | "show your chain of thought" | Remove it—ask for a concise rationale, evidence, and checks instead |
-| 28 | **Expecting inter-session memory** | "you already know my project" | Always re-provide the Memory Block in every new session |
-| 29 | **Contradicting prior work** | New prompt ignores earlier architecture | Include Memory Block with all established decisions |
-| 30 | **No grounding rule for factual tasks** | "summarize what experts say about X" | "Use only information you are highly confident is accurate. Say [uncertain] if not." |
+| # | Patrón | Ejemplo malo | Corrección |
+|---|--------|--------------|------------|
+| 8 | **Conocimiento previo supuesto** | «sigue donde lo dejamos» | Bloque de memoria con todas las decisiones previas |
+| 9 | **Sin contexto del proyecto** | «escribe una carta de presentación» | «Puesto de PM en fintech B2B, 2 años como ingeniero en transición a producto, lideré 3 funciones» |
+| 10 | **Stack olvidado** | El prompt nuevo contradice una elección técnica anterior | Bloque de memoria con el stack establecido |
+| 11 | **Invitación a inventar** | «¿qué dicen los expertos sobre X?» | «Cita solo fuentes de las que estés seguro; si dudas, dilo en vez de suponer» |
+| 12 | **Público indefinido** | «escribe algo para los usuarios» | «Compradores B2B no técnicos, sin conocimientos de programación, con poder de decisión» |
+| 13 | **Sin intentos previos** | (vacío) | «Ya probé X y no funcionó porque Y. No sugieras X» |
 
 ---
 
-## Agentic Patterns
+## Formato
 
-| # | Pattern | Bad Example | Fixed |
-|---|---------|------------|-------|
-| 31 | **No starting state** | "build me a REST API" | "Empty Node.js project, Express installed, `src/app.js` exists" |
-| 32 | **No target state** | "add authentication" | "`/src/middleware/auth.js` with JWT verify. `POST /login` and `POST /register` in `/src/routes/auth.js`" |
-| 33 | **Silent agent** | No progress output | "Report meaningful milestones, blockers, and final verification results" |
-| 34 | **Unlocked filesystem** | No file restrictions | "Only edit files inside `src/`. Do not touch `package.json`, `.env`, or any config file." |
-| 35 | **No human review trigger** | Agent decides everything autonomously | "Stop and ask before: deleting any file, adding any dependency, or changing the database schema" |
-| 36 | **Vague first turn for an agentic model** | "fix the auth bug" with no scope, files, or criteria | Use Template M for Claude or Template N for OpenAI tasks. Front-load the outcome, relevant context, file scope, constraints, action boundaries, and acceptance criteria. |
-| 37 | **Context rot on long sessions** | Repeats corrections while stale assumptions remain in context | Start a new session for unrelated work; otherwise compact around current decisions, constraints, failures, and target state. Delegate only independent, sizeable investigation. |
+| # | Patrón | Ejemplo malo | Corrección |
+|---|--------|--------------|------------|
+| 14 | **Sin formato de salida** | «explica este concepto» | «3 viñetas de menos de 20 palabras, con un resumen de una frase arriba» |
+| 15 | **Extensión implícita** | «haz un resumen» | «Resumen de exactamente 3 frases» |
+| 16 | **Sin perspectiva experta** | Tarea especializada sin contexto de dominio | Rol experto solo si cambia el resultado |
+| 17 | **Adjetivos estéticos vagos** | «que se vea profesional» | «Paleta monocroma, fuente base de 16 px, interlineado de 24 px, sin decoración» |
+| 18 | **Sin exclusiones en imagen** | «retrato de una mujer» | Exclusiones según la herramienta: `--no` en Midjourney, bloque negativo en SD/SDXL; en Flux y GPT Image, descríbelo en positivo |
+| 19 | **Prosa para Midjourney** | Frase descriptiva larga | «sujeto, estilo, ambiente, iluminación, composición» + parámetros al final según el perfil vigente |
+
+---
+
+## Alcance
+
+| # | Patrón | Ejemplo malo | Corrección |
+|---|--------|--------------|------------|
+| 20 | **Sin límite de alcance** | «arregla mi app» | «Arregla solo la validación del formulario de login en `src/auth.js`. No toques nada más» |
+| 21 | **Sin stack** | «haz un componente de React» | «React 18, TypeScript estricto, sin librerías externas, solo Tailwind» |
+| 22 | **Agente sin parada** | «construye toda la función» | Condiciones de parada + hitos con evidencia de verificación |
+| 23 | **IA de IDE sin ruta** | «actualiza la función de login» | «Actualiza solo `handleLogin()` en `src/pages/Login.tsx`» |
+| 24 | **Plantilla equivocada** | Prompt en prosa estilo chat usado en Cursor | Adaptar a la plantilla E (alcance de archivo) |
+| 25 | **Todo el código pegado** | El repo entero en cada prompt | Limitar al archivo y la función relevantes |
+
+---
+
+## Razonamiento
+
+| # | Patrón | Ejemplo malo | Corrección |
+|---|--------|--------------|------------|
+| 26 | **Lógica sin contrato de auditoría** | «¿qué enfoque es mejor?» | Recomendación, supuestos, criterios, evidencia y comprobaciones (plantilla C) |
+| 27 | **Pedir razonamiento oculto** | «muéstrame tu cadena de pensamiento» | Quitarlo; pedir justificación breve, evidencia y comprobaciones |
+| 28 | **Esperar memoria entre sesiones** | «ya conoces mi proyecto» | Volver a dar el bloque de memoria en cada sesión nueva, o un prompt permanente (plantilla M) |
+| 29 | **Contradecir trabajo previo** | El prompt nuevo ignora la arquitectura anterior | Bloque de memoria con las decisiones establecidas |
+| 30 | **Hechos sin ancla** | «resume lo que dicen los expertos sobre X» | «Usa solo información de la que estés muy seguro. Escribe [incierto] si no» |
+
+---
+
+## Agentes
+
+| # | Patrón | Ejemplo malo | Corrección |
+|---|--------|--------------|------------|
+| 31 | **Sin estado inicial** | «hazme una API REST» | «Proyecto Node.js vacío, Express instalado, existe `src/app.js`» |
+| 32 | **Sin estado final** | «añade autenticación» | «`/src/middleware/auth.js` con verificación JWT; `POST /login` y `POST /register` en `/src/routes/auth.js`» |
+| 33 | **Agente silencioso** | Sin informes de progreso | «Informa hitos, bloqueos y resultados de verificación final» |
+| 34 | **Sistema de archivos abierto** | Sin restricciones de archivos | «Edita solo dentro de `src/`. No toques `package.json`, `.env` ni configuración» |
+| 35 | **Sin revisión humana** | El agente lo decide todo | «Detente y pregunta antes de borrar archivos, añadir dependencias o cambiar el esquema de la base de datos» |
+| 36 | **Primer turno vago para un agente** | «arregla el bug de auth» sin alcance, archivos ni criterios | Plantilla K (Claude) o L (OpenAI): resultado, contexto, alcance, restricciones, límites de acción y criterios de aceptación al principio |
+| 37 | **Contexto podrido en sesiones largas** | Se repiten correcciones mientras siguen supuestos viejos | Sesión nueva para trabajo no relacionado; si no, compactar alrededor de decisiones, restricciones, fallos y estado final |
+
+---
+
+## Tono, vigencia y persistencia
+
+| # | Patrón | Ejemplo malo | Corrección |
+|---|--------|--------------|------------|
+| 38 | **Énfasis por todas partes** | «SIEMPRE haz X. NUNCA hagas Y. ES CRÍTICO…» | Instrucción directa con su razón; énfasis fuerte solo para límites de seguridad. Los modelos actuales siguen de más las mayúsculas y se vuelven rígidos |
+| 39 | **Versión o parámetro obsoleto** | `--v 6`, `--cref` o un identificador de modelo retirado | Usar el perfil vigente; si su fecha de revisión tiene más de 60 días, verificar en la documentación oficial |
+| 40 | **Tarea puntual en un prompt permanente** | «Eres mi asistente. Hoy arregla el bug de pagos» en las instrucciones de un GPT o en CLAUDE.md | Lo estable al prompt permanente (plantilla M); la tarea de hoy, en el mensaje |

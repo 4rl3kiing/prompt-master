@@ -1,26 +1,33 @@
 ```
-Role: Eres un abogado corporativo que resume contratos para personas sin formación jurídica.
+Objetivo:
+Resume el contrato que aparece al final para que alguien sin formación legal entienda en 2 minutos qué firma, qué debe hacer y qué riesgos tiene.
 
-Task: Resume el contrato que aparece entre las etiquetas <contrato> al final de este mensaje. Usa SOLO información que figure en el texto. Si un dato no aparece, escribe "No consta en el contrato". Si algo es ambiguo, escribe [ambiguo] y cita la cláusula. NUNCA inventes cláusulas, cifras ni fechas.
+Contexto:
+Soy [MI PARTE EN EL CONTRATO, p. ej. el arrendatario, el cliente, el proveedor]. Tipo de contrato: [TIPO, p. ej. alquiler de local, prestación de servicios, laboral]. País o jurisdicción: [PAÍS, p. ej. México].
 
-Format: Máximo 350 palabras, en español, con estos encabezados exactos:
-1. Resumen en 2 frases (qué se acuerda y entre quiénes)
-2. Partes
-3. Objeto y alcance
-4. Obligaciones principales de cada parte
-5. Precio, pagos y penalizaciones
-6. Duración, renovación y causas de terminación
-7. Cláusulas de riesgo (responsabilidad, exclusividad, confidencialidad, cesión, ley aplicable y jurisdicción)
-8. Fechas y plazos clave
-9. Puntos a revisar antes de firmar (máximo 5, cada uno con número de cláusula)
+Restricciones:
+- Básate solo en el texto del contrato. No supongas cláusulas que no aparecen y no inventes cifras, fechas ni nombres.
+- Si un dato falta o es ambiguo, escríbelo como [no consta] o [ambiguo], y no lo rellenes.
+- Cita el número de cláusula entre paréntesis en cada punto, para que pueda verificarlo.
+- Esto es un resumen informativo, no asesoría legal.
 
-Cada punto de los apartados 3 a 8 debe indicar entre paréntesis la cláusula de origen. Termina con una línea: "Este resumen no sustituye asesoría legal."
+Hecho cuando:
+- Cubre las 6 secciones de la salida y cada punto trae su cláusula.
+- Los riesgos son concretos (qué cláusula, qué me puede pasar), no generales.
 
-<contrato>
+Salida:
+Máximo 350 palabras, en este orden:
+1. Partes y objeto (2 líneas)
+2. Duración y renovación
+3. Pagos, importes y fechas
+4. Mis obligaciones y las de la otra parte (viñetas)
+5. Cómo termina el contrato y qué penalizaciones hay
+6. Puntos de riesgo o dudas que conviene aclarar o consultar con un abogado (máximo 5, de mayor a menor riesgo)
+
+Contrato:
 [PEGA AQUÍ EL TEXTO DEL CONTRATO]
-</contrato>
 ```
 
-🎯 Target: ChatGPT · 💡 Formato fijo con límite de palabras y ancla anti-invención (cita de cláusula y "No consta") para que el resumen sea verificable contra el contrato.
-
-Sustituye el marcador por el texto del contrato; si es un PDF, adjúntalo y borra las etiquetas <contrato>.
+🎯 Destino: ChatGPT · 💡 Instrucciones estables arriba y el contrato al final, con cláusulas citadas y marcas de «no consta» para que no invente datos.
+Nota: si el contrato es un PDF, adjúntalo y sustituye la última línea por «El contrato está adjunto». Evita pegar datos personales que no necesites (cédulas, cuentas bancarias).
+Supuestos: resumen para una persona sin formación legal, de unas 350 palabras; ajusta ese límite si lo quieres más corto o más detallado.

@@ -1,50 +1,47 @@
 ```
 ## Objetivo
-Añadir autenticación JWT a la API Express existente: /login emite un token firmado y un middleware protege las rutas privadas, dejando /login y /register públicas.
+Añadir autenticación JWT a mi API Express existente: `POST /login` emite un token firmado y las rutas protegidas lo exigen.
 
 ## Contexto
-- Node 20, Express. Las rutas están en src/routes/ y /login y /register ya existen, sin ninguna protección ni emisión de token.
-- Antes de editar, inspecciona con herramientas: src/routes/, el punto de entrada (donde se monta el router), el módulo de acceso a usuarios, el gestor de módulos (CommonJS o ESM), el framework de tests y los scripts de package.json. Basa cada decisión en lo que encuentres; no asumas la estructura.
+- Node 20, Express. Las rutas están en `src/routes/`.
+- `POST /login` y `POST /register` existen y hoy no tienen ninguna protección ni emiten token.
+- Almacén de usuarios actual: [DÓNDE SE GUARDAN LOS USUARIOS, p. ej. PostgreSQL con pg, MongoDB con mongoose, un arreglo en memoria]
+- Antes de escribir código, lee `src/routes/`, el archivo de entrada de la app y `package.json` para respetar el estilo (CommonJS o ESM, manejo de errores, estructura).
 
 ## Estado final
-- /login valida credenciales con la lógica existente y responde con un JWT firmado (HS256) con expiración de 1 hora y el id de usuario en el claim `sub`.
-- Existe un middleware de autenticación que lee `Authorization: Bearer <token>`, verifica firma y expiración, adjunta el usuario a `req.user` y responde 401 con JSON `{ "error": "..." }` si el token falta, es inválido o está caducado.
-- El middleware se aplica a todas las rutas de src/routes/ excepto /login y /register.
-- El secreto se lee de `process.env.JWT_SECRET`. Si falta, la app falla al arrancar con un mensaje claro.
-- Hay tests que cubren: login correcto devuelve token, token válido accede a una ruta protegida, sin token da 401, token caducado da 401, token con firma alterada da 401, /register y /login siguen accesibles sin token.
+- `src/middleware/auth.js` verifica el token del encabezado `Authorization: Bearer <token>` y responde 401 si falta, es inválido o está vencido.
+- `POST /login` devuelve un JWT con expiración de [TIEMPO DE EXPIRACIÓN, p. ej. 1h] cuando las credenciales son correctas, y 401 cuando no lo son.
+- `POST /register` y `POST /login` siguen siendo públicos; todas las demás rutas de `src/routes/` pasan por el middleware.
+- El secreto de firma se lee de la variable de entorno `JWT_SECRET`; no aparece en el código.
 
 ## Alcance
-- Trabaja solo en: src/routes/, el punto de entrada de la app, un nuevo src/middleware/auth.js (o .ts/.mjs según el proyecto), la carpeta de tests existente, package.json y .env.example.
-- NO toques: .env, archivos de lock, configuración de CI/Docker, esquema de base de datos, ni rutas ajenas a la autenticación.
+- Trabaja solo en: `src/routes/`, `src/middleware/` y el punto donde se montan las rutas.
+- No toques: `.env`, lockfiles, configuración de la base de datos ni el modelo de usuarios, salvo lo mínimo para verificar credenciales.
 
 ## Restricciones
-- La única dependencia nueva permitida es `jsonwebtoken`. Cualquier otra requiere preguntar antes.
-- Sigue el estilo del código existente (módulos, nombres, manejo de errores).
-- Solo haz los cambios pedidos. No añadas refresh tokens, roles, rate limiting, cookies ni refactors.
-- NUNCA escribas el valor del secreto en el código, en los tests ni en logs; los tests definen `JWT_SECRET` por variable de entorno. Añade solo el nombre `JWT_SECRET=` vacío a .env.example.
-- NUNCA devuelvas ni registres contraseñas ni hashes en las respuestas.
+- Node 20; sigue el sistema de módulos que ya usa el proyecto.
+- Usa [LIBRERÍA JWT, p. ej. jsonwebtoken]; es la única dependencia nueva permitida. Cualquier otra, pregunta antes.
+- Haz solo los cambios pedidos: sin refresh tokens, roles, rate limiting ni refactorizaciones, porque cada añadido es algo más que tengo que revisar.
 
 ## Criterios de aceptación
-- [ ] `npm test` pasa, incluidos los nuevos tests.
 - [ ] Una petición sin token a una ruta protegida devuelve 401.
-- [ ] /register y /login responden sin token.
-- [ ] No queda ningún secreto escrito en el código.
-- [ ] `git diff --stat` solo muestra archivos dentro del alcance.
+- [ ] Una petición con un token válido obtenido en `/login` devuelve la respuesta normal de la ruta.
+- [ ] Un token vencido o manipulado devuelve 401.
+- [ ] `/register` y `/login` responden sin token.
+- [ ] [COMANDO DE PRUEBAS, p. ej. npm test] pasa; si no hay pruebas, ejecuta el servidor y verifica cada punto anterior con curl, mostrando la salida.
 
 ## Límites de acción
-- Procede sin preguntar con inspección, ediciones y tests dentro del alcance.
-- Detente y pregunta antes de: instalar una dependencia distinta de `jsonwebtoken`, borrar archivos, tocar el esquema de base de datos, o cambiar cómo se almacenan las contraseñas. Si descubres que las contraseñas están en texto plano, detente e infórmame en vez de corregirlo por tu cuenta.
-- Si dos intentos seguidos de arreglar el mismo test fallan, detente y resume el bloqueo.
+- Adelante con lectura, ediciones dentro del alcance y ejecución de pruebas o del servidor local.
+- Detente y pregunta antes de borrar archivos, añadir dependencias distintas de la librería JWT, cambiar el esquema de la base de datos o crear secretos reales.
 
 ## Evidencia de progreso
-Informa solo al terminar cada fase (inspección, middleware, rutas, tests). Respalda cada afirmación de "hecho" con la salida real de un comando o el diff. Al final entrega: archivos modificados, salida de `npm test` y cualquier decisión que tomaste y que yo deba revisar.
-
-## Estrategia de sesión
-Sesión nueva: no depende de contexto previo.
+Informa solo cuando cambie algo o se alcance un hito. Respalda cada «terminado» con salida de pruebas, un archivo cambiado o la respuesta real de curl.
 ```
 
-🎯 Target: Claude Code · 💡 Brief estructurado con alcance acotado, una única dependencia permitida, tests concretos como criterio de éxito y condiciones de parada, porque el agente edita archivos y ejecuta comandos reales.
+Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo, y confirma que rutas, carpetas y permisos coinciden con tu proyecto.
 
-Antes de pegarlo, define `JWT_SECRET` en tu entorno local (no lo escribas en el prompt).
+Nota: define `JWT_SECRET` en tu `.env` local antes de probar; no lo pegues en el prompt.
 
-Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo. Confirma que las rutas, directorios y permisos coinciden con el proyecto real.
+🎯 Destino: Claude Code · 💡 Brief con estado final, alcance, criterios binarios verificables y paradas antes de acciones irreversibles, para que no amplíe el alcance ni declare terminado sin probar.
+
+Supuestos: `/login` y `/register` quedan públicos y el resto de rutas se protege; el token se envía como Bearer; no hay refresh tokens ni roles.

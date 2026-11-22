@@ -1,0 +1,15 @@
+```
+POSITIVE PROMPT:
+Cinematic portrait of a female astronaut in a white spacesuit, helmet visor raised, face turned slightly toward the camera, warm golden sunset light grazing her cheek and rim-lighting the edges of the suit, soft orange sky reflected on the glass visor, blurred desert horizon behind her, anamorphic lens look, shallow depth of field, teal and orange color grading, fine film grain, sharp focus on her eyes, 85mm medium close-up
+
+CHECKPOINT: [TU MODELO FLUX, p. ej. FLUX.2 [dev]]
+GUIDANCE: [VALOR DEL NODO FluxGuidance, p. ej. 3.5 como punto de partida]
+STEPS: [PASOS SEGÚN TU VARIANTE DE FLUX, p. ej. 20–30 en dev]
+RESOLUTION: 832x1216
+```
+
+🎯 Destino: ComfyUI con Flux · 💡 Solo bloque positivo, sin negativo, porque Flux no lo lee: lo que no quieres se evita describiendo en positivo («sharp focus on her eyes»). El prompt va en inglés porque estos modelos siguen mejor ese idioma, con lo importante al principio y unas 70 palabras.
+
+Nota: la guía se ajusta con el nodo FluxGuidance, no dentro del texto. Los valores de GUIDANCE y STEPS dependen de tu variante de Flux y no pude verificarlos aquí: confírmalos en la documentación de tu checkpoint.
+
+Supuestos: formato vertical 832x1216 (múltiplos de 64); casco con visor levantado para que se vea el rostro; paleta teal y naranja propia del cine de atardecer. Si tu checkpoint no es Flux, dímelo y rehago el bloque.

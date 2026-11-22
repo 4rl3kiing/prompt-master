@@ -1,54 +1,38 @@
 ```
-## Objetivo
-Añadir el módulo de perfil de usuario (ver y editar el perfil del usuario autenticado) a la app existente, siguiendo sus convenciones actuales.
+## Contexto previo
+- Stack: Next.js 15 (App Router) con Supabase.
+- Autenticación con magic links; el login ya está hecho y no se modifica.
+- Sin Redux: nada de estado global con librerías nuevas.
+- Estilos solo con Tailwind: sin CSS modules, styled-components ni otras librerías de UI.
 
-## Context (carry forward)
-- Stack: React 18 + TypeScript + Supabase.
-- Autenticación: JWT en cookies httpOnly (NO localStorage). El JS del navegador no puede leer el JWT.
-- Estado global: solo Context API. NO uses Redux ni otra librería de estado.
-- Componentes: PascalCase y SIN `export default` (solo exports con nombre). Aplica a CADA componente que crees.
-- Ya intentado y fallido: guardar el perfil con una función edge de Supabase falló por CORS. NO uses una función edge para guardar el perfil.
+Archivo: app/profile/page.tsx
+Componente: ProfilePage (página nueva, exportación por defecto)
 
-## Contexto de partida
-Antes de escribir código, inspecciona el repo con tus herramientas: cómo se hace hoy el acceso a datos autenticado, cómo está montado el contexto de autenticación, la estructura de carpetas, y si ya existe una tabla `profiles` (o equivalente) y sus políticas RLS. Reutiliza esos patrones; no inventes uno nuevo.
+Comportamiento actual:
+El archivo no existe. La ruta /profile todavía no devuelve nada.
 
-## Estado objetivo
-- Una página de perfil accesible solo para usuarios autenticados, con: ver perfil, editar y guardar.
-- Campos del perfil: nombre visible, bio corta y URL de avatar, salvo que la tabla existente ya defina otros; en ese caso usa los existentes.
-- Un `ProfileContext` (Context API) con el perfil actual, estado de carga, error y una acción de guardado.
-- El guardado usa el mismo mecanismo de acceso a datos autenticado que ya usa la app (sin función edge), con RLS que limite lectura y escritura al propio usuario.
-- Validación en cliente de los campos y mensajes de error visibles al usuario.
-- Tipos TypeScript explícitos para el perfil, sin `any`.
+Cambio deseado:
+Crea la página de perfil como componente de servidor asíncrono. Debe:
+- Obtener el usuario autenticado con el cliente de Supabase de servidor que ya usa el login: [RUTA DEL CLIENTE SUPABASE DE SERVIDOR, p. ej. lib/supabase/server.ts].
+- Si no hay sesión, redirigir a [RUTA DE LOGIN, p. ej. /login].
+- Si hay sesión, mostrar [DATOS DEL PERFIL, p. ej. correo, nombre y fecha de registro] con Tailwind.
 
-## Alcance
-- Trabaja solo en el código fuente de la app (componentes, contextos, servicios, tipos, rutas) y, si la tabla o las políticas RLS no existen, en un único archivo de migración de Supabase.
-- NO toques: `.env*`, `package-lock.json`, configuración de build o CI, el flujo de autenticación existente, ni funciones edge.
+Alcance:
+Modifica solo app/profile/page.tsx.
+No toques: el flujo de login, el middleware, el esquema de Supabase ni otros archivos existentes.
 
-## Restricciones
-- Solo cambios directamente pedidos. No añadas funcionalidades, abstracciones ni archivos más allá del módulo de perfil.
-- No añadas dependencias sin preguntar.
-- No expongas ni leas el JWT desde JavaScript, ni lo muevas a localStorage.
-- No incluyas claves, tokens ni valores de variables de entorno en el código ni en los mensajes.
+Restricciones:
+- Lenguaje y versión: TypeScript, Next.js 15 (App Router).
+- Sin dependencias nuevas fuera de package.json.
+- Reutiliza el cliente de Supabase existente; no crees otro.
+- Mantén la página como componente de servidor; sin useState ni useEffect.
 
-## Criterios de aceptación
-- [ ] `tsc --noEmit` y el linter del proyecto pasan sin errores nuevos.
-- [ ] Los tests existentes siguen pasando y el módulo añade pruebas para `ProfileContext` (carga, guardado correcto, error de guardado).
-- [ ] Un usuario autenticado ve y edita solo su propio perfil; uno no autenticado es redirigido según el patrón actual de rutas protegidas.
-- [ ] No hay llamadas a funciones edge en el módulo y no hay errores de CORS al guardar.
-- [ ] Ningún componente nuevo usa `export default`, y todos están en PascalCase.
-- [ ] No hay importaciones de Redux ni acceso a localStorage para credenciales.
-
-## Límites de acción
-- Procede sin preguntar con inspección, ediciones y validación reversibles dentro del alcance.
-- Detente y pregunta antes de: borrar archivos, añadir dependencias, cambiar el esquema de base de datos más allá de la migración mínima descrita, modificar el flujo de autenticación, o si el patrón actual de acceso a datos no permite escribir el perfil sin exponer el JWT a JavaScript.
-
-## Evidencia de progreso
-Informa solo al cerrar cada hito: (1) inspección y plan con la lista de archivos que vas a tocar, (2) implementación, (3) verificación. Respalda cada afirmación de "hecho" con la salida real de un comando o un archivo modificado. Al terminar, entrega: archivos cambiados, comandos de verificación ejecutados con su resultado y cualquier supuesto que hayas tomado.
-
-## Estrategia de sesión
-Sesión nueva: todo el contexto necesario está en este prompt.
+Hecho cuando:
+[COMANDO DE COMPROBACIÓN, p. ej. npm run build] termina sin errores de tipos, /profile redirige al login sin sesión y muestra los datos con sesión iniciada.
 ```
 
-🎯 Target: Claude Code · 💡 Brief estructurado con tus decisiones previas (cookies httpOnly, Context API, PascalCase sin export default) y el fallo de CORS convertido en prohibición explícita, con criterios de aceptación verificables y puntos de parada.
+🎯 Destino: Cursor · 💡 Acotado a un solo archivo y con las decisiones de la sesión al principio, para que Cursor no cambie el login ni meta librerías que descartaste.
 
-Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los bloqueos de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo. Confirma que las rutas, directorios y permisos coinciden con el proyecto real.
+Supuestos: el login ya expone un cliente de Supabase de servidor que se puede reutilizar; la página es de servidor y los datos del perfil salen del usuario autenticado.
+
+Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo, y confirma que rutas, carpetas y permisos coinciden con tu proyecto.

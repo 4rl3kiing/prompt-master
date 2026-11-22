@@ -1,7 +1,7 @@
-Antes de escribir el prompt necesito tres datos, porque "toda la app con todo incluido" es demasiado amplio para que Claude Code lo construya bien de una sola vez:
+Una app completa no se puede pedir en un solo prompt: Claude Code se desvía, inventa decisiones y genera código que luego hay que rehacer. Lo correcto es dividirla en prompts secuenciales (uno por módulo), pero para dividirla bien necesito tres datos:
 
-1. ¿Qué módulos necesitas en la primera versión? (por ejemplo: productos/SKU, entradas y salidas de stock, proveedores, alertas de stock mínimo, usuarios y roles, reportes, exportación CSV)
-2. ¿Qué base de datos y qué interfaz quieres? (por ejemplo: SQLite/PostgreSQL/MongoDB, y solo API REST o también un frontend web)
-3. ¿Qué tipo de inventario es y cuántos usuarios lo usarán? (tienda, almacén, taller...; un usuario o varios con login)
+1. ¿Qué stack quieres? (p. ej. Next.js + PostgreSQL, Django + SQLite, Laravel, o «el que recomiendes») ¿Es web, escritorio o móvil?
+2. ¿Qué módulos entran en «todo incluido»? Marca los que apliquen: productos y categorías, entradas y salidas de stock, múltiples almacenes, proveedores y compras, ventas o pedidos, alertas de stock mínimo, códigos de barras o QR, reportes y exportación, importación desde Excel/CSV.
+3. ¿Quién la usa y cómo? Número de usuarios, si hacen falta roles y permisos (administrador, almacenista, solo lectura) y si debe funcionar sin conexión.
 
-Con eso divido la app en prompts secuenciales (base de datos y API, luego lógica de stock, luego interfaz) y te los entrego uno a uno, listos para pegar.
+Con eso te entrego los prompts numerados, en orden de uso, cada uno con alcance, criterios de terminado y comandos de verificación. Si prefieres que decida yo, dímelo y supongo: web, TypeScript + PostgreSQL, un almacén, tres roles y los módulos básicos (productos, movimientos de stock, alertas y reportes), marcándolo como supuestos.

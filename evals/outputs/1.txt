@@ -1,35 +1,29 @@
 ```
-Archivo/Directorio: [ruta/exacta/al/módulo/auth, p. ej. src/auth/]
-Función/Componente: [funciones o clases públicas del módulo, p. ej. login, refreshToken, AuthService]
+Archivo: [RUTA DEL MÓDULO DE AUTH, p. ej. src/auth/index.ts]
+Función o componente: [FUNCIONES O CLASES A REFACTORIZAR, p. ej. login(), verifyToken()]
 
 Comportamiento actual:
-[Qué hace hoy el módulo y qué problema concreto tiene: p. ej. lógica de sesión duplicada en 3 archivos, funciones de más de 80 líneas, mezcla de validación, acceso a BD y emisión de tokens en un mismo archivo]
+[QUÉ HACE HOY EL MÓDULO Y QUÉ TE MOLESTA, p. ej. "login() mezcla validación, acceso a base de datos y emisión del token en 120 líneas"]
 
 Cambio deseado:
-Refactorizar el módulo para separar responsabilidades (validación de entrada, acceso a datos, emisión/verificación de tokens, middleware/guards), eliminar código duplicado y dar nombres claros a funciones y variables internas. El comportamiento externo MUST permanecer idéntico: mismas rutas, mismas respuestas, mismos códigos de error, mismos nombres y firmas exportados.
+Refactoriza el código para separar responsabilidades (validación, acceso a datos, emisión y verificación de tokens) en funciones pequeñas con un solo propósito. El comportamiento externo debe quedar idéntico: mismas entradas, mismas salidas, mismos errores.
 
 Alcance:
-Solo modificar archivos dentro de [ruta/exacta/al/módulo/auth].
-NO tocar: otros módulos, migraciones y esquema de base de datos, archivos de configuración, CI, variables de entorno, ni los tests existentes (salvo añadir tests nuevos).
-NEVER cambiar la lógica de hashing, expiración de tokens, ni reglas de autorización; si un cambio las afectara, detente y pregunta.
+Modifica solo los archivos y funciones listados arriba.
+No toques: el resto del proyecto, los archivos de configuración, `.env`, los lockfiles ni las pruebas existentes.
 
 Restricciones:
-- Lenguaje/framework: [p. ej. TypeScript 5.x, Node 20, Express 4]
-- NO añadir dependencias que no estén en [package.json / requirements.txt]
-- Conservar firmas de tipos, contratos de API públicos y nombres exportados
-- Realizar el refactor en pasos pequeños y mostrar el diff antes de eliminar cualquier archivo
-
-Detenerse y preguntar antes de: eliminar archivos, añadir dependencias, cambiar el esquema de base de datos, o resolver una ambigüedad que afecte a la arquitectura.
+- Lenguaje y versión: [LENGUAJE Y VERSIÓN, p. ej. TypeScript 5, Node 20]
+- Sin dependencias nuevas fuera de [package.json / requirements.txt]
+- Conserva los nombres exportados, las firmas de tipos y los contratos de API que usan otros módulos
+- No cambies lógica de seguridad (hashing, expiración, validaciones); solo reorganízala
 
 Hecho cuando:
-1. Los tests existentes del módulo pasan sin modificarlos: [comando, p. ej. npm test -- auth]
-2. El linter y el type-check pasan sin errores nuevos: [comando]
-3. No hay cambios en la API pública del módulo (verificado comparando exports antes y después)
-4. Resumen final con la lista de cada archivo modificado, creado o movido, y el resultado real de los comandos anteriores
+[COMANDO DE PRUEBAS, p. ej. npm test] pasa sin modificar ninguna prueba y ningún archivo fuera del alcance aparece cambiado en el diff. Si el módulo no tiene pruebas, detente y avísame antes de refactorizar.
 ```
 
-🎯 Target: Cursor · 💡 Plantilla de alcance por archivo con refactor que preserva el comportamiento, lista de "no tocar" y criterios de finalización verificables para que el agente no se salga del módulo.
+Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo, y confirma que rutas, carpetas y permisos coinciden con tu proyecto.
 
-Rellena los corchetes (ruta, stack y comandos de test) antes de pegar.
+🎯 Destino: Cursor · 💡 Anclado a archivo y función, con lista de «no tocar» y un «Hecho cuando» verificable para que Cursor sepa cuándo parar y no reescriba de más.
 
-Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo. Confirma que las rutas, directorios y permisos coinciden con el proyecto real.
+Supuestos: es un refactor sin cambio de comportamiento (no una funcionalidad nueva); si quieres cambiar comportamiento, dímelo y lo ajusto.
