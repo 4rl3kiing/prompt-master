@@ -6,7 +6,7 @@ Uso:
   python3 -I scripts/run_evals.py              # además comprueba evals/outputs/<id>.txt (los ausentes se omiten)
 
 Campos de un caso: id, input, loads, must_match, must_not_match,
-  type ("prompt" por defecto | "question" | "analysis": modo Decompiler, sin línea Target), must_not_match_in_prompt (solo dentro de bloques ```),
+  type ("prompt" por defecto | "question" | "analysis": modo decompilador, sin línea Destino | "adjust": modo ajuste, sin línea Destino), must_not_match_in_prompt (solo dentro de bloques ```),
   xfail (motivo; el caso se reporta como XFAIL y no rompe la ejecución).
 Las comprobaciones son heurísticas de formato; no sustituyen la lectura de la salida.
 """
@@ -36,7 +36,7 @@ def validate(data):
         seen.add(cid)
         for k in ("input", "loads", "must_match", "must_not_match"):
             if k not in c: errors.append(f"caso {cid}: falta '{k}'")
-        if c.get("type", "prompt") not in ("prompt", "question", "analysis"): errors.append(f"caso {cid}: type inválido")
+        if c.get("type", "prompt") not in ("prompt", "question", "analysis", "adjust"): errors.append(f"caso {cid}: type inválido")
         errors += rx_errors(cid, c.get("must_match", []) + c.get("must_not_match", []) + c.get("must_not_match_in_prompt", []))
         for ref in c.get("loads", []):
             if not os.path.exists(os.path.join(ROOT, ref)): errors.append(f"caso {cid}: no existe {ref}")

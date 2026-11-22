@@ -1,46 +1,28 @@
 ```
-Objetivo:
-Añadir paginación al endpoint GET /users sin romper a sus consumidores actuales.
+Contexto: Mi empresa vende [NOMBRE DEL SOFTWARE, p. ej. NóminaÁgil], un software de nóminas para [TIPO DE CLIENTE, p. ej. pymes de 20 a 200 empleados en México].
+Objetivo: Una presentación de ventas de exactamente 10 diapositivas que lleve al público a [ACCIÓN DESEADA, p. ej. agendar una demo de 30 minutos].
+Público: [CARGO DEL DECISOR, p. ej. director de finanzas o de RR. HH.]. Conoce el problema de calcular nóminas a mano, es escéptico ante promesas de ahorro y quiere ver riesgos de cumplimiento cubiertos.
+Tono y estilo: Directo y concreto, sin adjetivos de marketing ni signos de exclamación. Español neutro.
 
-Estado inicial:
-- El endpoint /users está definido en [ruta/al/archivo/del/handler] y devuelve [todos los usuarios / lista actual].
-- Stack: [lenguaje + framework + versión]. Acceso a datos: [ORM / SQL directo / otro].
-- Antes de editar, localiza el handler, la capa de acceso a datos y los tests existentes de /users, y resume en 3 líneas cómo funciona hoy.
+Estructura (una idea por diapositiva, en este orden):
+1. Portada: nombre del software y una promesa de una línea.
+2. Problema: qué falla hoy al calcular nóminas.
+3. Costo del problema: errores, multas y horas perdidas.
+4. Solución: qué hace el software, en una frase.
+5. Tres funciones clave y el beneficio de cada una.
+6. Cómo se implementa: pasos y tiempo estimado.
+7. Resultados: [CASOS DE CLIENTES O CIFRAS REALES; si no hay, deja el marcador «[DATO PENDIENTE]»].
+8. Cumplimiento y seguridad: [NORMATIVAS Y CERTIFICACIONES REALES, p. ej. SAT e IMSS].
+9. Planes y precios: [PLANES Y PRECIOS REALES].
+10. Llamada a la acción: el siguiente paso concreto y cómo darlo.
 
-Estado final:
-- GET /users acepta los parámetros de consulta `page` (por defecto 1, mínimo 1) y `limit` (por defecto [20], máximo [100]).
-- La respuesta mantiene el formato actual de cada usuario y añade metadatos de paginación: `page`, `limit`, `total`, `total_pages`. Si hoy devuelve un array plano, envuélvelo en un objeto con `data` + metadatos y avísame de ese cambio de contrato antes de aplicarlo.
-- La consulta usa LIMIT/OFFSET (o el equivalente del ORM) con un ORDER BY determinista, por ejemplo `id`, para que las páginas no se solapen.
-- Valores inválidos (`page` o `limit` no numéricos, menores que 1 o por encima del máximo) devuelven 400 con un mensaje claro.
-- Una página fuera de rango devuelve `data` vacío con 200.
+Formato de cada diapositiva: título de máximo 8 palabras, hasta 3 viñetas de máximo 12 palabras cada una, una sugerencia visual de una línea y una nota del orador de 1 o 2 frases.
 
-Acciones permitidas:
-- Leer cualquier archivo del proyecto.
-- Editar solo el handler de /users, su capa de acceso a datos y su archivo de tests.
-- Añadir tests para: valores por defecto, página intermedia, última página, página fuera de rango, `limit` inválido y `limit` por encima del máximo.
-- Ejecutar solo el comando de tests: [comando de tests].
-
-Acciones prohibidas:
-- NO modificar otros endpoints, migraciones, esquema de base de datos, configuración ni CI.
-- NO añadir dependencias.
-- NO ejecutar el servidor de desarrollo ni desplegar.
-- NO hacer commit ni push.
-- NO borrar archivos.
-- NO refactorizar código que no sea necesario para esta tarea.
-
-Condiciones de parada (pausa y pregunta antes de seguir si):
-- Para paginar hace falta un índice o un cambio de esquema.
-- Cambiar el formato de respuesta rompe a otros consumidores que encuentres en el código.
-- Un error no se resuelve en 2 intentos.
-- La tarea exige tocar archivos fuera del alcance indicado.
-
-Verificación y checkpoints:
-- Al terminar, ejecuta [comando de tests] y muestra la salida real. Todos los tests deben pasar, los nuevos incluidos.
-- Termina con la lista de archivos modificados y un resumen de cada cambio. Declara explícitamente cualquier cosa que no pudieras verificar.
+Límites: No inventes cifras, nombres de clientes, certificaciones ni precios. Donde falte un dato, escribe «[DATO PENDIENTE]». No añadas diapositivas fuera de las 10.
 ```
 
-🎯 Target: ZorbCode · 💡 Sin perfil dedicado para ZorbCode, usé el enfoque de agentes autónomos de terminal (alcance cerrado, acciones prohibidas, condiciones de parada y verificación con tests) para que no se salga del endpoint /users.
+🎯 Destino: Zorblax Studio (generador de presentaciones) · 💡 Estructura fija de 10 diapositivas con formato por lámina y marcadores en vez de datos inventados, porque estas herramientas rellenan huecos con cifras falsas si no se les limita.
 
-Sustituye los campos entre [corchetes] por los datos de tu proyecto antes de pegarlo.
+Sin perfil dedicado para Zorblax Studio; usé el enfoque de las herramientas que generan un entregable completo a partir de un brief. Si la herramienta no admite notas del orador o sugerencias visuales, quita esas dos partes del formato de cada diapositiva.
 
-Este prompt es para una herramienta agéntica con acceso real al sistema. Revisa los límites de alcance, las acciones prohibidas y las condiciones de parada antes de pegarlo. Confirma que las rutas, directorios y permisos coinciden con el proyecto real.
+Supuestos: público B2B de decisores de finanzas o RR. HH.; la meta de la presentación es conseguir una demo; el orden de las diapositivas sigue el esquema problema, solución, prueba y cierre.

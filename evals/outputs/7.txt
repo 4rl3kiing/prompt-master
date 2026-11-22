@@ -1,38 +1,36 @@
 ```text
-Eres un abogado especializado en arrendamientos que revisa contratos desde la perspectiva de [ARRENDATARIO / ARRENDADOR]. Tu trabajo es marcar cláusulas de riesgo para esa parte.
+Objetivo:
+Revisa el contrato de arrendamiento que te pego abajo y marca las cláusulas que representan un riesgo para [PARTE QUE REPRESENTO, p. ej. arrendatario o arrendador], para que pueda decidir qué negociar o corregir antes de firmar.
 
-Goal:
-Analizar el contrato de arrendamiento de [VIVIENDA / LOCAL COMERCIAL] pegado abajo y marcar cada cláusula que suponga un riesgo para [ARRENDATARIO / ARRENDADOR].
+Contexto:
+- Tipo de inmueble y uso: [TIPO Y USO, p. ej. vivienda, local comercial, oficina].
+- Jurisdicción y ley aplicable: [PAÍS Y ESTADO O REGIÓN, p. ej. México, Ciudad de México].
+- Lo que más me preocupa: [PREOCUPACIONES, p. ej. aumentos de renta, penalizaciones por terminación anticipada, o "ninguna en particular"].
+- No soy abogado. Escribe de forma que lo entienda alguien sin formación jurídica.
 
-Context:
-- Jurisdicción y ley aplicable: [PAÍS / ESTADO / CIUDAD]. Si no la indico o el contrato no la identifica, dilo al inicio y limita el análisis a riesgos que no dependan de la ley local.
-- Datos relevantes: [DURACIÓN, RENTA MENSUAL, DEPÓSITO, USO PREVISTO].
-- Preocupaciones específicas (opcional): [POR EJEMPLO: PENALIZACIONES, AUMENTOS DE RENTA, SALIDA ANTICIPADA].
+Restricciones:
+- Basa cada hallazgo en el texto del contrato: cita la cláusula (número y fragmento literal breve) y no atribuyas al contrato lo que no dice.
+- Si una conclusión depende de la ley de [JURISDICCIÓN] y no estás seguro de lo que establece, escribe [incierto] y di qué debería confirmar un abogado local. No inventes artículos ni jurisprudencia.
+- Si el contrato omite algo que normalmente protege a [PARTE], indícalo aparte como "cláusula ausente".
+- Si el texto pegado está incompleto o es ilegible en algún punto, dilo en lugar de suponer su contenido.
+- Haz la revisión sin pedirme confirmaciones intermedias; si falta un dato, asume lo más razonable, decláralo en "Supuestos" y continúa.
 
-Constraints:
-- Basa cada hallazgo únicamente en el texto del contrato. Cita la cláusula literalmente (máximo 2 frases) y su número.
-- Usa solo normas y criterios jurídicos de los que estés muy seguro. Si no lo estás, escribe [incierto]. NO inventes artículos, leyes ni jurisprudencia.
-- Marca también las omisiones importantes (por ejemplo: reparaciones, devolución del depósito, subarriendo, rescisión, actualización de renta) cuando el contrato no las regule.
-- NO reescribas el contrato completo ni añadas cláusulas nuevas salvo como sugerencia de redacción para un riesgo marcado.
+Hecho cuando:
+- Revisaste todas las cláusulas del contrato, no solo las primeras.
+- Cada riesgo marcado trae cláusula citada, por qué es riesgo para [PARTE] y una propuesta concreta de redacción o de negociación.
+- Los riesgos están ordenados por gravedad (alta, media, baja) y la gravedad tiene una razón de una frase.
 
-Done:
-- Se revisaron TODAS las cláusulas; las que no presentan riesgo se listan al final solo por número.
-- Cada riesgo tiene nivel (Alto / Medio / Bajo), motivo concreto y acción recomendada.
-- Los supuestos y puntos inciertos quedan declarados.
-
-Output:
-1. Resumen (máximo 5 líneas): conclusión general y los 3 riesgos principales.
-2. Tabla con columnas: Nº de cláusula | Cita textual | Nivel de riesgo | Por qué es un riesgo | Cambio sugerido.
-3. Omisiones relevantes (lista breve).
-4. Supuestos, puntos [incierto] y qué documento o dato adicional haría falta.
-5. Cierra con una línea: "Análisis informativo; no sustituye la revisión de un abogado colegiado en [JURISDICCIÓN]."
+Salida:
+1. Resumen: máximo 5 líneas con el nivel de riesgo global y los 3 puntos más urgentes.
+2. Tabla con las columnas: Cláusula | Fragmento citado | Riesgo | Gravedad | Cambio propuesto.
+3. Cláusulas ausentes (lista breve).
+4. Supuestos e incertidumbres: lo que asumiste y lo que debe confirmar un abogado.
+Termina con una línea que diga que esto es un análisis orientativo y no sustituye asesoría legal.
 
 Contrato:
-"""
 [PEGA AQUÍ EL TEXTO COMPLETO DEL CONTRATO]
-"""
 ```
 
-🎯 Target: OpenAI GPT (último modelo; nombre exacto no verificado) · 💡 Usé un brief estructurado con rol, citas literales y marca [incierto] para evitar leyes inventadas, con tabla de riesgos fácil de revisar.
-
-No pude verificar cuál es el modelo más reciente, así que elige en el selector de ChatGPT el más potente disponible en tu plan; el prompt funciona con toda la familia GPT. Rellena los campos entre corchetes antes de pegarlo.
+🎯 Destino: GPT-6.2 Astra (el modelo más reciente y capaz de OpenAI, disponible desde 2026-11-17) · 💡 Brief con resultado, criterios de "hecho" y salida en tabla, y ancla de verificación ([incierto]) para que no invente leyes; sin pasos de razonamiento, porque el modelo ya razona solo.
+Nota: en ChatGPT elige GPT-6.2 Astra y activa el razonamiento alto si ofrece la opción. Si lo usas por API, usa `reasoning.effort` en `medium` o `high` (ese ajuste va fuera del prompt). Pega el contrato completo en el campo final.
+Supuestos: no indicaste a qué parte representas ni la jurisdicción, así que los dejé como campos; son los dos datos que más cambian qué es un riesgo.

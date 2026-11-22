@@ -4,7 +4,8 @@ Casos para comprobar el skill a mano (pegar la entrada en Claude con el skill ac
 
 ## Formato de la salida (aplica a todos)
 - Un único bloque de prompt copiable.
-- Una línea `🎯 Target … 💡 …`; sin nombres de framework ni estimación de tokens.
+- Una línea `🎯 Destino … 💡 …`; sin nombres de marco ni estimación de tokens.
+- Etiquetas del prompt en el idioma del prompt (salvo imagen/video/3D/música, que van en inglés).
 - Nota de preparación solo si hace falta (máx. 2 líneas).
 
 ## Casos
@@ -19,11 +20,17 @@ Casos para comprobar el skill a mano (pegar la entrada en Claude con el skill ac
 | 6 | "Prompt para [herramienta inexistente X]" | Usa la categoría más cercana y lo dice en la nota; no inventa capacidades |
 | 7 | "Prompt para el último modelo de OpenAI" | Aplica la Puerta de Recencia; declara qué no está verificado; no inventa slugs |
 | 8 | Petición con una API key incrustada | Elimina la credencial y avisa de usar variables de entorno |
-| 9 | "Continúa donde lo dejamos" con historial de decisiones | Antepone el bloque `## Context (carry forward)` en el primer 30 % |
+| 9 | "Continúa donde lo dejamos" con historial de decisiones | Antepone el bloque `## Contexto previo` en el primer 30 % |
 | 10 | "Hazme un prompt" (sin herramienta ni tarea) | Hace una sola pregunta aclaratoria; no entrega prompt aún |
 | 11 | "Prompt para ComfyUI" | Pregunta por el checkpoint; entrega bloques POSITIVE y NEGATIVE separados |
 | 12 | "Construye toda mi app" | Pregunta primero lo crítico (máx. 3) y anuncia la descomposición en prompts secuenciales |
 | 13 | "Hazme un prompt para ChatGPT que resuma un contrato" | La respuesta y el prompt salen en español (regla de idioma) |
+| 14 | Instrucciones para un GPT personalizado de atención al cliente | Plantilla M: prioridades, conducta fuera de alcance; sin MUST/NEVER |
+| 15 | Ajuste tras la entrega: "hazlo más minimalista" | Modo ajuste: cambia solo lo necesario y añade la línea `Cambio:` |
+| 16 | "Prompt para ComfyUI con Flux" | Sin parámetros de SD (CFG 7) aplicados a Flux; exclusiones según el perfil de Flux |
+| 17 | "Prompt para Midjourney de un gato con sombrero" | Prompt en inglés; sin `--v 6` |
+| 18 | "Hazme un prompt para resumir artículos largos" (sin herramienta) | Entrega un prompt universal en vez de preguntar |
+| 19 | "Prompt para Claude Code: paginación en src/routes/products.ts" | Etiquetas en español, sin MUST/NEVER, aviso agéntico en español |
 
 ## Carga bajo demanda
 - Caso 3 y 11 solo necesitan `references/media.md` y `references/templates/visual.md`; no deben cargar `models.md` ni `agents.md`.
@@ -33,7 +40,10 @@ Casos para comprobar el skill a mano (pegar la entrada en Claude con el skill ac
 `evals/cases.json` repite estos casos con comprobaciones por expresión regular. Guarda la salida de cada caso en `evals/outputs/<id>.txt` y ejecuta `python3 -I scripts/run_evals.py`. Los casos sin salida se omiten; `--validate` solo comprueba que el archivo de casos sea correcto (lo usa `check.sh`).
 
 
-## Línea base (2026-11-08)
+## Línea base v2.0.0 (2026-11-22)
+Ver la sección del CHANGELOG de 2.0.0 y `evals/benchmark.md`: los 19 casos se corrieron con la versión nueva y con la 1.10.1, y `evals/outputs/` guarda las salidas de la nueva.
+
+## Línea base anterior (2026-11-08)
 Las salidas de `evals/outputs/` se generaron simulando el skill: 13 agentes independientes (modelo Sonnet), cada uno con solo `SKILL.md`, sus referencias y la petición del caso. Es un sustituto, no el skill activado en Claude real; sirve para detectar regresiones al cambiar el skill, no para medir calidad absoluta.
 
 - Los 13 casos pasan.

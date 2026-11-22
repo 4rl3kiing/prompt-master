@@ -1,101 +1,76 @@
 # Perfiles de agentes, IDEs, generadores y orquestadores
 
-*Leer cuando el destino ejecute acciones o edite archivos (Claude Code, Codex, Cursor, Cline, Copilot, Devin, Bolt/v0/Lovable, Antigravity, Perplexity/Manus, agentes de navegador).*
+*Lee este archivo cuando el destino ejecute acciones o edite archivos. Para el modelo que usa cada agente, aplica también el perfil de `references/models.md` si su comportamiento importa.*
+
+> **Última revisión: 2026-11-22.** Verificado contra la documentación oficial en esa fecha; lo marcado [sin verificar] no se confirmó en una fuente oficial. Para archivos de instrucciones permanentes (CLAUDE.md, AGENTS.md, reglas) usa la plantilla M.
+
+## Reglas comunes
+
+Todo agente con acceso real necesita: estado inicial, estado final, acciones permitidas y prohibidas, condiciones de parada y evidencia de verificación. Las condiciones de parada evitan bucles que queman créditos; la verificación evita que «termine» sin comprobar. Deja que el agente ejecute pruebas y el servidor local: prohibirlo lo obliga a entregar sin verificar.
 
 ---
 
 **Claude Code**
-- Agentic — runs tools, edits files, executes commands autonomously
-- Starting state + target state + allowed actions + forbidden actions + stop conditions + checkpoints
-- Stop conditions are MANDATORY — runaway loops are the biggest credit killer
-- Do not assume the Claude Code model. Apply the matching current Claude route in references/models.md; when model-specific behavior matters, ask which model is selected.
-- Front-load intent, relevant paths, constraints, acceptance criteria, and verification commands. Explicitly request tool use when inspection is required.
-- Current Fable/Opus models can over-scope and delegate readily. Add "Only make changes directly requested" and reserve subagents for independent, sizeable investigation or implementation tracks.
-- Do not force a separate verifier on Opus 5.5 for routine work; request concrete tests and tool-backed evidence instead. For long Fable 5.1 runs, require progress claims to cite actual tool results.
-- Always scope to specific files and directories — never give a global instruction without a path anchor
-- Human review triggers required: "Stop and ask before deleting any file, adding any dependency, or affecting the database schema"
-- For complex tasks, use Template M. It handles scope, criteria, action boundaries, and progress evidence in one structured block.
+- Usa la plantilla K. Pon primero la intención, las rutas relevantes, las restricciones, los criterios de aceptación y los comandos de verificación; pide uso de herramientas explícitamente cuando haga falta inspeccionar.
+- No supongas el modelo: aplica la ruta de Claude vigente en `models.md`; pregunta cuál usa solo si importa.
+- Fable y Opus pueden ampliar el alcance y delegar con facilidad: añade «Haz solo los cambios pedidos» y reserva los subagentes para líneas de trabajo independientes y grandes.
+- No fuerces un verificador separado en Opus 5.5 para trabajo rutinario; pide pruebas concretas y evidencia de herramientas. En ejecuciones largas de Fable, exige que cada progreso cite resultados reales.
+- Ancla siempre a archivos y carpetas concretos.
+- Revisión humana: «Detente y pregunta antes de borrar archivos, añadir dependencias o cambiar el esquema de la base de datos».
+- Lee `CLAUDE.md` (y `.claude/rules/*.md` con `paths:`), no `AGENTS.md`: si el proyecto tiene AGENTS.md, CLAUDE.md debe importarlo con `@AGENTS.md`.
 
----
+**Codex (CLI, app, nube)**
+- Aplica la ruta de OpenAI de `models.md`; el predeterminado actual es GPT-6.2 Sol. No deduzcas el modelo por el nombre del producto. Plantilla L para tareas complejas.
+- Estructura: Objetivo, Contexto, Alcance, Restricciones, Límites de aprobación y Hecho cuando, con comandos de verificación si se conocen.
+- Empieza con el esfuerzo por defecto y ajústalo según resultados. Verifica los controles disponibles antes de recomendar etiquetas de la interfaz.
+- Un agente principal responsable de la síntesis; cada subagente con un entregable acotado y concurrencia limitada.
+- Lee `AGENTS.md`.
 
-**Codex CLI / ChatGPT Work / Codex IDE**
-- Apply the matching OpenAI model route in references/models.md, including GPT-6 Luna, GPT-6.1 Sol, GPT-6 Astra, or GPT-5.6 when selected. Do not infer the model from the Codex product name. Use Template N for complex OpenAI tasks.
-- Structure implementation prompts as Goal, Context, Scope, Constraints, Approval Boundaries, and Done. Include concrete verification commands when known.
-- Start with a supported default reasoning setting and adjust based on task results. Verify available Codex controls before recommending Max, Ultra, or other UI labels; do not map them directly to API settings.
-- Keep one primary agent responsible for synthesis. Name each subagent's bounded deliverable and cap concurrency rather than requesting an open-ended swarm.
-- Ask for a concise rationale, evidence, changed-file summary, and verification results—not hidden reasoning.
+**Cursor**
+- Archivo + función + comportamiento actual + cambio deseado + lista de «no tocar» + lenguaje y versión (plantilla E). Nunca una instrucción global sin ancla de archivo.
+- «Hecho cuando:» es obligatorio: define cuándo deja de editar.
+- Tareas complejas: prompts secuenciales en vez de uno grande.
+- Reglas del proyecto en `.cursor/rules/*.mdc` con metadatos (`description`, `globs`, `alwaysApply`); también lee `AGENTS.md`.
 
----
+**Devin Desktop (antes Windsurf) y Devin**
+- Windsurf se llama Devin Desktop desde 2026-06-02 y su agente es Devin Local. Si el usuario dice «Windsurf», es esto.
+- Mismo enfoque que Cursor para ediciones acotadas (plantilla E); para tareas autónomas en Devin (web, CLI, API), plantilla F con criterios de terminado explícitos y tareas verificables.
+- Reglas en `.devin/rules/*.md` (todavía lee `.windsurf/rules/`) y `AGENTS.md`.
 
-**Antigravity (Google's agent-first IDE, powered by Gemini 3 Pro)**
-- Task-based prompting — describe outcomes, not steps
-- Prompt for an Artifact (task list, implementation plan) before execution so you can review it first
-- Browser automation is built-in — include verification steps: "After building, verify UI at 375px and 1440px using the browser agent"
-- Specify autonomy level: "Ask before running destructive terminal commands"
-- Do NOT mix unrelated tasks — scope to one deliverable per session
-
----
-
-**Cursor / Windsurf**
-- File path + function name + current behavior + desired change + do-not-touch list + language and version
-- Never give a global instruction without a file anchor
-- "Done when:" is required — defines when the agent stops editing
-- For complex tasks: split into sequential prompts rather than one large prompt
-
----
-
-**Cline (formerly Claude Dev)**
-- Agentic VS Code extension — autonomously edits files, runs terminal commands, uses browser tools
-- Powered by Claude, GPT, or other LLMs — prompting style should match the underlying model
-- Starting state + target state + file scope + stop conditions + approval gates
-- Always specify which files to edit and which to leave untouched
-- Add "Ask before running terminal commands" or "Ask before installing dependencies" to prevent unwanted actions
-- Can read file contents, search codebases, and use browser automation — leverage these for context gathering
-- For multi-step tasks: break into sequential prompts with clear checkpoints
-- Cline shows a task list before executing — review it and adjust scope if needed
-
----
+**Cline**
+- Extensión agéntica de VS Code: edita, ejecuta terminal y usa navegador; el estilo de prompt sigue al modelo de debajo.
+- Estado inicial + estado final + archivos permitidos y prohibidos + condiciones de parada + puertas de aprobación («Pregunta antes de ejecutar comandos o instalar dependencias»).
+- Reglas en `.clinerules/` (también detecta `.cursorrules`, `.windsurfrules` y AGENTS.md).
 
 **GitHub Copilot**
-- Write the exact function signature, docstring, or comment immediately before invoking
-- Describe input types, return type, edge cases, and what the function must NOT do
-- Copilot completes what it predicts, not what you intend — leave no ambiguity in the comment
+- *Autocompletado:* escribe la firma exacta, el docstring o el comentario justo antes; tipos de entrada y salida, casos límite y lo que no debe hacer.
+- *Modo agente en el IDE:* como Cursor (plantilla E).
+- *Agente en la nube* (se le asignan issues y trabaja en un entorno efímero): plantilla F, con el issue como objetivo y criterios de aceptación verificables.
+- Instrucciones del repo en `.github/copilot-instructions.md`; por ruta en `.github/instructions/*.instructions.md` con `applyTo`; también lee AGENTS.md.
 
----
+**Google Antigravity**
+- IDE con agentes, multimodelo: por defecto Gemini 4 Neon, y también otros Gemini 4, Claude y GPT-OSS. Aplica el perfil del modelo elegido.
+- Describe resultados, no pasos. Pide primero un artefacto (lista de tareas o plan) para revisarlo antes de ejecutar.
+- Tiene navegador integrado: incluye verificación («Comprueba la interfaz a 375 px y 1440 px con el agente de navegador»).
+- Fija la autonomía: «Pregunta antes de comandos destructivos». Un entregable por sesión.
 
-**Bolt / v0 / Lovable / Figma Make / Google Stitch**
-- Full-stack generators default to bloated boilerplate — scope it down explicitly
-- Always specify: stack, version, what NOT to scaffold, clear component boundaries
-- Lovable responds well to design-forward descriptions — include visual/UX intent
-- v0 is Vercel-native — specify if you need non-Next.js output
-- Bolt handles full-stack — be explicit about which parts are frontend vs backend vs database
-- Figma Make is design-to-code native — reference your Figma component names directly
-- Google Stitch is prompt-to-UI focused — describe the interface goal not the implementation. Add "match Material Design 3 guidelines" for Google-native styling
-- Add "Do not add authentication, dark mode, or features not explicitly listed" to prevent feature bloat
+**Generadores de apps: Bolt, v0, Lovable, Figma Make, Google Stitch**
+- Tienden a generar código de más: acota el alcance.
+- Especifica stack, versión, qué no generar y límites entre componentes; di qué debe quedar igual en cada iteración.
+- Lovable: empieza en modo plan, da la dirección de diseño pronto, construye componente a componente con textos reales, y guarda palabras clave de estilo en las instrucciones del proyecto.
+- Bolt: arquitectura y frameworks primero, luego una función por prompt; usa su «Knowledge» para lo permanente.
+- v0 es nativo de Vercel/Next.js: dilo si necesitas otra salida. [modelos actuales sin verificar]
+- Figma Make: referencia los nombres de componentes de Figma. Google Stitch: describe el objetivo de la interfaz, no la implementación.
+- Añade «No agregues autenticación, modo oscuro ni funciones que no estén en la lista».
 
----
+**Investigación y orquestación: Perplexity, Manus**
+- Perplexity: especifica buscar, analizar o comparar; exige citas; reformula preguntas propensas a inventar como consultas con fuentes. [estado actual de su investigación profunda sin verificar]
+- Manus (ahora de Meta) y otros orquestadores: describe el entregable final, no los pasos; ellos descomponen. Especifica el tipo de artefacto (informe, hoja de cálculo, código) y «Marca cualquier dato del que no estés seguro».
+- En tareas largas, añade puntos de verificación: cada paso encadenado acumula riesgo de invención.
 
-**Devin / SWE-agent**
-- Fully autonomous — can browse web, run terminal, write and test code
-- Very explicit starting state + target state required
-- Forbidden actions list is critical — Devin will make decisions you did not intend without explicit constraints
-- Scope the filesystem: "Only work within /src. Do not touch infrastructure, config, or CI files."
-
----
-
-**Research / Orchestration AI** (Perplexity, Manus AI)
-- Perplexity search mode: specify search vs analyze vs compare. Add citation requirements. Reframe hallucination-prone questions as grounded queries.
-- Manus and Perplexity Computer are multi-agent orchestrators — describe the end deliverable, not the steps. They decompose internally.
-- For Perplexity Computer: specify the output artifact type (report / spreadsheet / code / summary). Add "Flag any data point you are not confident about."
-- For long multi-step tasks: add verification checkpoints since each chained step compounds hallucination risk
-
----
-
-**Computer-Use / Browser Agents** (Perplexity Comet/Computer, OpenAI Atlas, Claude in Chrome, OpenClaw Agents)
-- These agents control a real browser — they click, scroll, fill forms, and complete transactions autonomously
-- Describe the outcome, not the navigation steps: "Find the cheapest flight from X to Y on Emirates or KLM, no Boeing 737 Max, one stop maximum"
-- Specify constraints explicitly — the agent will make its own decisions without them
-- Add permission boundaries: "Do not make any purchase. Research only."
-- Add a stop condition for irreversible actions: "Ask me before submitting any form, completing any transaction, or sending any message"
-- Comet works best with web research, comparison, and data extraction tasks
-- Atlas is stronger for multi-step commerce and account management tasks
+**Agentes de navegador y uso de computadora** (Perplexity Comet, ChatGPT agent, Claude in Chrome y similares)
+- Controlan un navegador real: hacen clic, rellenan formularios y pueden completar transacciones.
+- Describe el resultado, no la navegación: «Encuentra el vuelo más barato de X a Y en Emirates o KLM, máximo una escala».
+- Límites de permiso: «No compres nada. Solo investiga».
+- Parada antes de lo irreversible: «Pregúntame antes de enviar un formulario, completar una compra o mandar un mensaje».
+- Plantilla F para tareas de varios pasos.

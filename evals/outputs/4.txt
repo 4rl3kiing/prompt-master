@@ -1,22 +1,27 @@
 ```
-Determina la ruta de reparto que minimiza [DISTANCIA TOTAL / TIEMPO TOTAL] y visita cada una de estas 12 ciudades exactamente una vez.
+Eres un asesor financiero personal. Analiza si me conviene más pagar mi tarjeta de crédito o invertir ese dinero.
 
-Punto de partida: [CIUDAD DE ORIGEN]
-¿Regreso al origen?: [SÍ / NO]
-Ciudades: [LISTA DE LAS 12 CIUDADES]
-Datos de distancia o tiempo: [MATRIZ ADJUNTA / "usa distancias por carretera aproximadas"]
-Restricciones: [VENTANAS HORARIAS, LÍMITE DE KM POR DÍA, VEHÍCULO, ETC. / "ninguna"]
+Mis datos:
+- Saldo de la tarjeta: [SALDO, p. ej. 40.000 MXN]
+- Tasa de interés anual de la tarjeta: [TASA ANUAL, p. ej. 55 %]
+- Dinero disponible: [MONTO, p. ej. 40.000 MXN]
+- Inversión que consideras: [INSTRUMENTO Y RENDIMIENTO ESPERADO, p. ej. fondo indexado, 8 % anual]
+- Horizonte de inversión: [PLAZO, p. ej. 5 años]
+- Fondo de emergencia actual: [MESES DE GASTOS CUBIERTOS, p. ej. 2 meses]
+- País: [PAÍS, para impuestos y productos disponibles]
 
-Entrega, en este orden:
-1. Ruta final: lista numerada de ciudades con la distancia o el tiempo de cada tramo y el total.
-2. Supuestos: máximo 5 viñetas. Marca con [estimado] cualquier distancia que no provenga de los datos entregados. No inventes datos.
-3. Criterio de decisión: máximo 3 frases sobre por qué esta ruta supera a la mejor alternativa que consideraste.
-4. Verificación: confirma que aparecen las 12 ciudades, sin repetir ninguna, y que el total coincide con la suma de los tramos.
-5. Incertidumbre: si la ruta es solo una buena aproximación y no un óptimo comprobado, indícalo.
+Devuelve:
+1. Recomendación: pagar, invertir o dividir (con porcentajes).
+2. Supuestos que hiciste donde falte información.
+3. Cifras clave que respaldan la recomendación: costo anual de mantener la deuda frente al rendimiento esperado neto de la inversión.
+4. Comprobaciones realizadas, incluido qué pasaría si el rendimiento de la inversión fuera la mitad.
+5. Incertidumbre restante y qué dato mío la reduciría.
 
-Longitud máxima: 250 palabras.
+Mantén la justificación breve y centrada en lo que decide el resultado. Usa solo cifras que yo te di o que declares como supuesto; si no estás seguro de un dato, escribe [incierto] y no lo inventes.
 ```
 
-🎯 Target: o3 · 💡 Quité "piensa paso a paso" y la petición de la cadena de pensamiento completa (degradan a los modelos de razonamiento y no se debe pedir razonamiento oculto), y las sustituí por un criterio de optimización, datos de entrada, formato fijo, verificación auditable y límite de longitud en lugar de "sé muy detallado".
+🎯 Destino: o3 (OpenAI) · 💡 Cambié «piensa paso a paso» y «muestra tu cadena de pensamiento» por un contrato auditable (conclusión, supuestos, cifras, comprobaciones, incertidumbre), porque los modelos de razonamiento ya piensan por dentro y lo útil de revisar es la evidencia, no su razonamiento interno.
 
-Rellena los corchetes con tus datos, sobre todo la lista de las 12 ciudades, que en tu prompt original no aparecía.
+Nota: o3 está en retiro y se apaga el 2026-12-11. Este mismo prompt funciona en `gpt-6.2-astra` (razonamiento exigente); si lo usas por API, el esfuerzo se ajusta con `reasoning.effort` (empieza en `medium`), no dentro del prompt.
+
+Cambio: quité la cadena de pensamiento y el «paso a paso», añadí los datos que solo tú conoces (rellena los campos entre corchetes) y un ancla contra datos inventados.

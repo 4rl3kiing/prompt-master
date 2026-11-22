@@ -1,0 +1,7 @@
+```
+elegant tabby cat wearing a black silk top hat, sitting upright in a leather armchair reading an open broadsheet newspaper held in its paws, cozy Victorian study, warm lamplight, wood paneling, soft dust motes, whimsical and dignified mood, photorealistic, shallow depth of field, rich amber and deep green palette, medium shot --ar 4:5 --raw --no watermark, extra limbs, distorted paws
+```
+
+🎯 Destino: Midjourney · 💡 Descriptores separados por comas con el sujeto primero y parámetros al final; el prompt va en inglés porque Midjourney lo interpreta mejor, y las exclusiones usan `--no`.
+
+Supuestos: estilo fotorrealista con ambiente victoriano, formato vertical `--ar 4:5` y modelo por defecto (sin `--v`). Si lo quieres como ilustración o en otro formato, dímelo y lo ajusto.

@@ -1,162 +1,112 @@
-# Plantillas de escritura y razonamiento (A–F)
+# Plantillas de escritura y razonamiento (A–D)
 
-*RTF, CO-STAR, RISEN, CRISPE, Auditable Reasoning, Few-Shot. Leer solo la plantilla que encaja con la tarea.*
-
----
-
-## Template A — RTF
-
-*Role, Task, Format. Use for fast one-shot tasks where the request is clear and simple.*
-
-```
-Role: [One sentence defining who the AI is]
-Task: [Precise verb + what to produce]
-Format: [Exact output format and length]
-```
-
-**Example:**
-```
-Role: You are a senior technical writer.
-Task: Write a one-paragraph description of what a REST API is.
-Format: Plain prose, 3 sentences maximum, no jargon, suitable for a non-technical audience.
-```
+*Directa, Brief de escritura, Razonamiento auditable y Ejemplos. Lee solo la plantilla que encaja con la tarea.*
 
 ---
 
-## Template B — CO-STAR
+## Template A — Directa
 
-*Context, Objective, Style, Tone, Audience, Response. Use for professional documents, business writing, reports, and marketing content where full context control matters.*
+*Para tareas simples de un paso, cuando la petición ya es clara. Tres líneas bastan; añadir secciones solo diluye la instrucción.*
 
 ```
-Context: [Background the AI needs to understand the situation]
-Objective: [Exact goal — what success looks like]
-Style: [Writing style: formal / conversational / technical / narrative]
-Tone: [Emotional register: authoritative / empathetic / urgent / neutral]
-Audience: [Who reads this — their knowledge level and expectations]
-Response: [Format, length, and structure of the output]
+Rol: [una frase: quién es la IA, solo si la especialidad cambia el resultado]
+Tarea: [verbo preciso + qué producir]
+Formato: [forma exacta y extensión de la salida]
 ```
 
-**Example:**
+**Ejemplo:**
 ```
-Context: I am a founder pitching a B2B SaaS tool that automates expense reporting for mid-size companies.
-Objective: Write a cold email that gets a reply from a CFO.
-Style: Direct and conversational, not salesy.
-Tone: Confident but not pushy.
-Audience: CFO at a 200-person company, busy, skeptical of vendor emails.
-Response: 5 sentences max. Subject line included. No bullet points.
+Rol: Eres redactor técnico sénior.
+Tarea: Explica en un párrafo qué es una API REST.
+Formato: Prosa, máximo 3 frases, sin jerga, para un lector no técnico.
 ```
 
 ---
 
-## Template C — RISEN
+## Template B — Brief de escritura
 
-*Role, Instructions, Steps, End Goal, Narrowing. Use for complex projects, multi-step tasks, and any output that requires a clear sequence of actions.*
-
-```
-Role: [Expert identity the AI should adopt]
-Instructions: [Overall task in plain terms]
-Steps:
-  1. [First action]
-  2. [Second action]
-  3. [Continue as needed]
-End Goal: [What the final output must achieve]
-Narrowing: [Constraints, scope limits, what to exclude]
-```
-
-**Example:**
-```
-Role: You are a product manager with 10 years of experience in mobile apps.
-Instructions: Write a product requirements document for a habit tracking feature.
-Steps:
-  1. Define the problem statement in one paragraph
-  2. List user stories in the format "As a [user], I want [goal] so that [reason]"
-  3. Define acceptance criteria for each story
-  4. List out-of-scope items explicitly
-End Goal: A PRD that an engineering team can begin sprint planning from immediately.
-Narrowing: No technical implementation details. No wireframes. Under 600 words total.
-```
-
----
-
-## Template D — CRISPE
-
-*Capacity, Role, Insight, Statement, Personality, Experiment. Use for creative work, brand voice writing, and any task where personality, tone, and iteration matter.*
+*Une lo útil de CO-STAR, RISEN y CRISPE en un solo esquema. Para documentos, textos de negocio, marketing, creatividad y voz de marca. Usa solo las secciones que el caso necesita: un correo frío necesita Contexto, Objetivo, Tono, Público y Respuesta; un documento largo con fases necesita además Pasos; una pieza creativa, Variantes.*
 
 ```
-Capacity: [What capability or expertise the AI should have]
-Role: [Specific persona to adopt]
-Insight: [Key background insight that shapes the response]
-Statement: [The core task or question]
-Personality: [Tone and style — witty / authoritative / casual / sharp]
-Experiment: [Request variants or alternatives to explore]
+Contexto: [situación que la IA necesita entender]
+Objetivo: [qué debe lograr el texto; cómo se ve el éxito]
+Público: [quién lo lee, qué sabe, qué espera, qué objeciones tiene]
+Tono y estilo: [registro y estilo concretos; p. ej. «directo, sin adjetivos, sin signos de exclamación»]
+Pasos: [solo si el orden importa: 1…, 2…, 3…]
+Límites: [qué excluir, extensión máxima, temas prohibidos]
+Variantes: [solo si conviene explorar: «3 versiones, de sobria a atrevida»]
+Respuesta: [formato, extensión y estructura de la salida]
 ```
 
-**Example:**
+**Ejemplo (correo frío):**
 ```
-Capacity: Expert copywriter specializing in SaaS product launches.
-Role: Brand voice for a productivity tool aimed at developers.
-Insight: Developers hate marketing speak and respond to honesty and specificity.
-Statement: Write the hero headline and sub-headline for the landing page.
-Personality: Sharp, dry, confident — no adjectives, no exclamation marks.
-Experiment: Give 3 variants ranging from minimal to bold.
+Contexto: Soy fundador de un SaaS B2B que automatiza los reportes de gastos en empresas medianas.
+Objetivo: Un correo frío que consiga una respuesta del director financiero.
+Público: Director financiero de una empresa de 200 personas; ocupado y escéptico ante correos de proveedores.
+Tono y estilo: Directo y conversacional, seguro sin presionar; nada de lenguaje de ventas.
+Respuesta: Asunto + cuerpo de máximo 5 frases, sin viñetas.
+```
+
+**Ejemplo (pieza creativa con variantes):**
+```
+Contexto: Herramienta de productividad para desarrolladores; detestan el lenguaje de marketing y responden a la honestidad y la concreción.
+Objetivo: Titular y subtítulo de la página de inicio.
+Tono y estilo: Seco, seguro, sin adjetivos ni exclamaciones.
+Variantes: 3 versiones, de la más sobria a la más atrevida.
+Respuesta: Cada variante en dos líneas (titular / subtítulo), etiquetada por su estilo.
 ```
 
 ---
 
-## Template E — Auditable Reasoning
+## Template C — Razonamiento auditable
 
-*Use for logic-heavy tasks, math, debugging, and multi-factor analysis where the result must be checkable without requesting private reasoning.*
+*Para lógica, matemáticas, depuración y análisis de varios factores donde el resultado debe poder revisarse sin pedir razonamiento privado.*
 
 ```
-[Task statement]
+[Enunciado de la tarea]
 
-Return:
-1. Conclusion
-2. Assumptions
-3. Evidence or intermediate results needed to audit the conclusion
-4. Verification checks performed
-5. Remaining uncertainty, if any
+Devuelve:
+1. Conclusión
+2. Supuestos
+3. Evidencia o resultados intermedios necesarios para auditar la conclusión
+4. Comprobaciones realizadas
+5. Incertidumbre restante, si la hay
 
-Do not reveal hidden chain-of-thought or private reasoning. Keep the rationale concise and decision-relevant.
+Mantén la justificación breve y centrada en lo que decide el resultado.
 ```
 
-**When to use:**
-- Debugging where the cause is not obvious
-- Comparing technical approaches
-- Math or calculation requiring verification
-- Analysis where evidence and assumptions must be inspectable
+**Cuándo usarla:** depuración con causa no evidente, comparar enfoques técnicos, cálculos que deben verificarse, análisis donde supuestos y evidencia tienen que ser revisables.
 
-**When NOT to use:**
-- Simple tasks where the answer is clear
-- Creative tasks where an audit trail adds noise
+**Cuándo no:** tareas simples con respuesta clara, o creativas donde el rastro de auditoría solo añade ruido.
 
 ---
 
-## Template F — Few-Shot
+## Template D — Ejemplos (few-shot)
 
-*Use when the output format is easier to show than describe. Examples outperform written instructions for format-sensitive tasks every time.*
+*Cuando el formato es más fácil de mostrar que de describir. Los ejemplos fijan el formato mejor que cualquier descripción.*
 
 ```
-[Task instruction]
+[Instrucción de la tarea]
 
-Here are examples of the exact format needed:
+Ejemplos del formato exacto:
 
-<examples>
-  <example>
-    <input>[example input 1]</input>
-    <output>[example output 1]</output>
-  </example>
-  <example>
-    <input>[example input 2]</input>
-    <output>[example output 2]</output>
-  </example>
-</examples>
+<ejemplos>
+  <ejemplo>
+    <entrada>[entrada 1]</entrada>
+    <salida>[salida 1]</salida>
+  </ejemplo>
+  <ejemplo>
+    <entrada>[entrada 2, preferiblemente un caso límite]</entrada>
+    <salida>[salida 2]</salida>
+  </ejemplo>
+</ejemplos>
 
-Now apply this exact pattern to: [actual input]
+Aplica el mismo patrón a: [entrada real]
 ```
 
-**Rules:**
-- 2 to 5 examples is the sweet spot. More rarely helps and wastes tokens.
-- Examples must include edge cases, not just easy cases.
-- Use XML tags to wrap examples — Claude parses XML reliably.
-- If you have been re-prompting for the same formatting correction twice, switch to few-shot instead of rewriting instructions.
+**Pautas:**
+- De 2 a 5 ejemplos; más rara vez ayuda y gasta tokens.
+- Incluye al menos un caso límite, no solo casos fáciles: el modelo copia la variedad que ve.
+- Varía lo que debe variar (tema, longitud) y mantén fijo lo que debe ser fijo (formato), o el modelo copiará detalles que no querías.
+- Envuelve los ejemplos en etiquetas XML; Claude y GPT las separan bien del resto.
+- Si el usuario ya corrigió dos veces el mismo formato, cambia a ejemplos en vez de reescribir la instrucción.

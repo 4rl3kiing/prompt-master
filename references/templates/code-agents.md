@@ -1,72 +1,70 @@
-# Plantillas para edición de código y agentes (G–H)
+# Plantillas para edición de código y agentes (E–F)
 
-*File-Scope (Cursor, Windsurf, Copilot) y ReAct + Stop Conditions (Claude Code, Devin, agentes autónomos).*
-
----
-
-## Template G — File-Scope
-
-*Use for Cursor, Windsurf, GitHub Copilot, and any AI that edits code inside a codebase. The most common failure mode here is editing the wrong file or breaking existing logic — this template prevents both.*
-
-```
-File: [exact/path/to/file.ext]
-Function/Component: [exact name]
-
-Current Behavior:
-[What this code does right now — be specific]
-
-Desired Change:
-[What it should do after the edit — be specific]
-
-Scope:
-Only modify [function / component / section].
-Do NOT touch: [list everything to leave unchanged]
-
-Constraints:
-- Language/framework: [specify version]
-- Do not add dependencies not in [package.json / requirements.txt]
-- Preserve existing [type signatures / API contracts / variable names]
-
-Done When:
-[Exact condition that confirms the change worked correctly]
-```
+*Alcance de archivo (Cursor, Windsurf, Copilot) y Agente autónomo (Devin, SWE-agent, Manus, agentes de navegador). Para Claude Code y Codex en tareas complejas usa K o L en `task-briefs.md`.*
 
 ---
 
-## Template H — ReAct + Stop Conditions
+## Template E — Alcance de archivo
 
-*Use for Claude Code, Devin, AutoGPT, and any AI that takes autonomous actions. Runaway loops and scope explosion are the biggest credit killers in agentic workflows — stop conditions are not optional.*
+*Para Cursor, Windsurf, GitHub Copilot y cualquier IA que edita código dentro de un proyecto. Sus fallos típicos son editar el archivo equivocado y romper lógica existente; esta plantilla previene ambos.*
 
 ```
-Objective:
-[Single, unambiguous goal in one sentence]
+Archivo: [ruta/exacta/al/archivo.ext]
+Función o componente: [nombre exacto]
 
-Starting State:
-[Current file structure / codebase state / environment]
+Comportamiento actual:
+[Qué hace hoy el código, concreto]
 
-Target State:
-[What should exist when the agent is done]
+Cambio deseado:
+[Qué debe hacer después del cambio, concreto]
 
-Allowed Actions:
-- [Specific action the agent may take]
-- Install only packages listed in [requirements.txt / package.json]
+Alcance:
+Modifica solo [función / componente / sección].
+No toques: [todo lo que debe quedar igual]
 
-Forbidden Actions:
-- Do NOT modify files outside [directory/scope]
-- Do NOT run the dev server or deploy
-- Do NOT push to git
-- Do NOT delete files without showing a diff first
-- Do NOT make architecture decisions without human approval
+Restricciones:
+- Lenguaje y versión: [p. ej. TypeScript 5, Node 20]
+- Sin dependencias nuevas fuera de [package.json / requirements.txt]
+- Conserva [firmas de tipos / contratos de API / nombres exportados]
 
-Stop Conditions:
-Pause and ask for human review when:
-- A file would be permanently deleted
-- A new external service or API needs to be integrated
-- Two valid implementation paths exist and the choice affects architecture
-- An error cannot be resolved in 2 attempts
-- The task requires changes outside the stated scope
+Hecho cuando:
+[Condición exacta que confirma el cambio; idealmente un comando de prueba que pasa]
+```
 
-Checkpoints:
-After each major step, output: ✅ [what was completed]
-At the end, output a full summary of every file changed.
+---
+
+## Template F — Agente autónomo
+
+*Para Devin, SWE-agent, Manus, agentes de navegador y cualquier agente sin plantilla propia. Los bucles sin fin y la expansión de alcance son los mayores gastos en flujos agénticos, así que las condiciones de parada no son opcionales. A la vez, el agente necesita poder comprobar su trabajo: prohibir ejecutar pruebas o el servidor local lo obliga a entregar sin verificar.*
+
+```
+Objetivo:
+[Una meta, en una frase sin ambigüedad]
+
+Estado inicial:
+[Estructura de archivos, estado del código o del entorno; en navegador: sitio y sesión]
+
+Estado final:
+[Qué debe existir o haber ocurrido al terminar]
+
+Acciones permitidas:
+- [Acciones concretas: leer, editar dentro de [RUTA], ejecutar pruebas y el servidor local para verificar]
+- Instalar solo paquetes ya listados en [requirements.txt / package.json]
+
+Acciones prohibidas:
+- Modificar archivos fuera de [RUTA O ALCANCE]
+- Desplegar, publicar o hacer push sin aprobación
+- Borrar archivos sin mostrar antes el diff
+- En navegador: comprar, enviar formularios o mensajes, o cambiar datos de cuenta
+
+Condiciones de parada — detente y pregunta cuando:
+- Un archivo se borraría de forma permanente
+- Haga falta integrar un servicio o API externa nueva
+- Haya dos caminos válidos y la elección afecte a la arquitectura
+- Un error siga sin resolverse tras 2 intentos
+- La tarea exija cambios fuera del alcance declarado
+
+Verificación y progreso:
+- Tras cada hito, informa: ✅ [qué se completó] + [evidencia: salida de prueba o comando]
+- Al final: resumen de cada archivo cambiado y resultado de las pruebas
 ```

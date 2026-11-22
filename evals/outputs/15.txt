@@ -1,0 +1,7 @@
+```
+minimalist reading nook, single armchair with a folded knitted blanket, one warm lamp glowing softly, rain-streaked window, muted neutral palette, soft diffused light, clean composition, generous negative space, calm and quiet mood --ar 4:5 --no clutter, books, plants, shelves, fairy lights, busy details
+```
+
+Cambio: quité los libros apilados, las plantas, el gato, las luces de hadas, las estanterías y los términos "detailed" y "cinematic", que recargaban la escena; conservé la luz cálida de la lámpara, la lluvia en la ventana, la manta tejida y el formato `--ar 4:5`, y añadí descriptores de minimalismo (paleta neutra, composición limpia, espacio negativo) y un `--no` para frenar que reaparezcan los elementos retirados.
+
+🎯 Destino: Midjourney · 💡 Prompt en inglés porque el modelo responde mejor así; menos sujetos y más aire en la composición es lo que reduce lo recargado.

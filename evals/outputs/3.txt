@@ -1,5 +1,7 @@
 ```
-lone samurai standing in heavy rain at night, wet kimono and straw hat, hand resting on katana hilt, narrow Edo-period alley with wooden buildings, glowing paper lanterns reflecting on wet cobblestones, cinematic, melancholic and tense mood, low-key lighting with warm lantern glow against cold blue moonlight, rain streaks backlit, mist rising from the ground, deep blue and amber color palette, wide shot with low angle, shallow depth of field, in the style of Akira Kurosawa films, highly detailed --ar 16:9 --v 6 --style raw --no text, watermark, modern objects, extra limbs, blur
+lone samurai standing in heavy rain at night, weathered traditional armor and straw hat, rain streaming off the blade of a katana, narrow Edo-period alley with wet cobblestones reflecting glowing paper lanterns, drifting mist, cinematic low-key lighting, deep shadows, cool blue and teal tones with warm amber lantern highlights, low-angle wide shot, shallow depth of field, photorealistic --ar 16:9 --raw --no text, watermark, modern objects, cartoon
 ```
 
-🎯 Target: Midjourney · 💡 Descriptores separados por comas con el sujeto primero, luego escenario, estilo, iluminación y composición, y parámetros al final; el prompt va en inglés porque Midjourney rinde mejor en ese idioma.
+🎯 Destino: Midjourney · 💡 Descriptores separados por comas con el sujeto primero, luego ambiente, luz y composición, y parámetros al final; va en inglés porque estos modelos siguen mejor las descripciones en ese idioma.
+
+Supuestos: formato horizontal 16:9, estilo fotorrealista y cinematográfico, y ambientación japonesa tradicional (época Edo); sin `--v`, así que usa el modelo por defecto de tu cuenta. Si lo quieres vertical, cambia a `--ar 2:3`; si lo prefieres ilustrado, quita `photorealistic` y `--raw`.
